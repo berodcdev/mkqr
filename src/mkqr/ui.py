@@ -48,6 +48,7 @@ class C:
     BANNER = ("\033[38;5;207m", "\033[38;5;171m", "\033[38;5;135m",
               "\033[38;5;99m", "\033[38;5;63m", "\033[38;5;69m")  # gradiente
     QR = "\033[38;5;255m"
+    RED = "\033[31m"
 
 
 def paint(text: str, *codes: str) -> str:
@@ -157,7 +158,8 @@ class Parser(argparse.ArgumentParser):
 
     def error(self, message: str) -> None:  # type: ignore[override]
         self.print_usage(sys.stderr)
-        self.exit(2, f"{self.prog}: {paint('erro', C.BOLD, '\033[31m')}: {message}\n")
+        erro = paint("erro", C.BOLD, C.RED)
+        self.exit(2, f"{self.prog}: {erro}: {message}\n")
 
 
 QUICK = [

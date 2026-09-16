@@ -38,9 +38,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pipx && pipx ensurepath
       - name: install.sh
         run: NO_COLOR=1 ./install.sh --no-completion
-      - run: ~/.local/bin/mkqr -V
+      - name: mkqr instalado
+        run: '"$(pipx environment --value PIPX_BIN_DIR)/mkqr" -V'
       - name: uninstall.sh
-        run: NO_COLOR=1 ./uninstall.sh && ! test -x ~/.local/bin/mkqr
+        run: |
+          NO_COLOR=1 ./uninstall.sh
+          ! test -e "$(pipx environment --value PIPX_BIN_DIR)/mkqr"
