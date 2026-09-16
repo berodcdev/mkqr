@@ -2,6 +2,8 @@
 
 QR codes pela linha de comando, sem fricção. Digite `mkqr` sem argumentos para ver o guia rápido, ou `mkqr -h` para tudo.
 
+![mkqr no terminal](docs/img/mkqr.svg)
+
 ```sh
 mkqr https://nodetp.com.br -O ~/Documents/nodetp-qrcode.png
 mkqr https://nodetp.com.br -O ~/Documents/          # nome automático: nodetp.com.br-qrcode.png
@@ -24,7 +26,7 @@ JPG, PDF e EPS não têm transparência e saem com fundo branco e margem 4.
 ## Instalação
 
 ```sh
-git clone <repo> && cd mkqr
+git clone https://github.com/berodcdev/mkqr.git && cd mkqr
 ./install.sh              # pipx + autocomplete do bash; use -e para modo editável
 ./uninstall.sh            # remove tudo
 ```
@@ -52,3 +54,14 @@ argcomplete (autocomplete). O clipboard usa `wl-copy` (wl-clipboard) e `--open` 
 | `-q, --quiet` | não imprime o caminho | |
 | `--install-completion` | grava o autocomplete do bash em `~/.local/share/bash-completion/completions/` | |
 | `--no-color` | desliga as cores (ou defina `NO_COLOR`) | |
+
+## Desenvolvimento
+
+```sh
+./install.sh -e                      # instala em modo editável
+python -m venv .venv && . .venv/bin/activate
+pip install -e ".[dev]" && pytest    # testes
+```
+
+A ajuda completa (`mkqr -h`) está em [docs/img/mkqr-help.svg](docs/img/mkqr-help.svg).
+Licença MIT.

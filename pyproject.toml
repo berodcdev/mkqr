@@ -4,16 +4,47 @@ build-backend = "hatchling.build"
 
 [project]
 name = "mkqr"
-version = "0.1.0"
-description = "Gere QR codes pela linha de comando com facilidade"
+dynamic = ["version"]
+description = "QR codes pela linha de comando, sem fricção: PNG/SVG/PDF, Wi-Fi, vCard, logo, clipboard"
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
+license-files = ["LICENSE"]
 authors = [{ name = "Bernardo" }]
+keywords = ["qr", "qrcode", "cli", "wifi", "vcard", "segno"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: End Users/Desktop",
+  "Natural Language :: Portuguese (Brazilian)",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Multimedia :: Graphics",
+  "Topic :: Utilities",
+]
 dependencies = ["segno>=1.6", "qrcode-artistic>=3.0", "argcomplete>=3.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/berodcdev/mkqr"
+Issues = "https://github.com/berodcdev/mkqr/issues"
 
 [project.scripts]
 mkqr = "mkqr.cli:main"
 
+[tool.hatch.version]
+path = "src/mkqr/__init__.py"
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/mkqr"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

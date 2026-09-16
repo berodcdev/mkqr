@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Instala
+        run: pip install -e ".[dev]"
+      - name: Testes
+        run: pytest -q
+      - name: Fumaça
+        env:
+          NO_COLOR: "1"
+        run: |
+          mkqr -V
+          mkqr
+          mkqr https://github.com/berodcdev/mkqr -O smoke.png
+          mkqr --wifi CI -p senha -O smoke-wifi.svg
+          test -s smoke.png && test -s smoke-wifi.svg
+
+  install-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pipx && pipx ensurepath
+      - name: install.sh
+        run: NO_COLOR=1 ./install.sh --no-completion
+      - run: ~/.local/bin/mkqr -V
+      - name: uninstall.sh
+        run: NO_COLOR=1 ./uninstall.sh && ! test -x ~/.local/bin/mkqr
