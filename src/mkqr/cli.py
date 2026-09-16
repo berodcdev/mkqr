@@ -1,5 +1,5 @@
 # PYTHON_ARGCOMPLETE_OK
-"""CLI do getqrcode / mkqr."""
+"""CLI do mkqr."""
 
 from __future__ import annotations
 
@@ -18,12 +18,13 @@ from argcomplete.completers import ChoicesCompleter, FilesCompleter
 from segno import helpers
 
 from . import __version__
+from . import ui
 
 RASTER = {".png", ".jpg", ".jpeg", ".webp"}
 ALPHA = {".png", ".webp", ".svg"}  # formatos com transparência: saem sem margem e sem fundo
 FORMATS = RASTER | {".svg", ".pdf", ".eps", ".txt", ".ans", ".pbm", ".pam", ".ppm", ".xpm", ".tex"}
 DEFAULT_EXT = ".png"
-COMMANDS = ("mkqr", "getqrcode")
+COMMANDS = ("mkqr",)
 NO_SUGGESTIONS = ChoicesCompleter(())  # sugere o flag, mas nenhum valor (evita listar arquivos)
 COLORS = ("black", "white", "transparent", "#000", "#fff", "#0a2540", "#1e40af", "#166534", "#b91c1c")
 
@@ -81,43 +82,55 @@ def completion_dir() -> Path:
 
 
 def install_completion() -> int:
-    """Grava os arquivos de completion do bash para mkqr e getqrcode."""
+    """Grava o arquivo de completion do bash para o mkqr."""
     target = completion_dir()
     target.mkdir(parents=True, exist_ok=True)
     for cmd in COMMANDS:
         code = argcomplete.shellcode([cmd], shell="bash")
         (target / cmd).write_text(code)
         print(target / cmd)
-    print("pronto: abra um novo terminal (ou rode `exec bash`) e use Tab em mkqr / getqrcode")
+    print("pronto: abra um novo terminal (ou rode `exec bash`) e use Tab depois de mkqr")
     return 0
 
 
 # ---------------------------------------------------------------- parser
 
 def build_parser() -> argparse.ArgumentParser:
-    p = argparse.ArgumentParser(
-        prog=Path(sys.argv[0]).name or "getqrcode",
+    p = ui.Parser(
+        prog="mkqr",
+        usage=(
+            "mkqr TEXTO_OU_URL [-O ARQUIVO] [opções]\n"
+            "       mkqr --wifi SSID [-p SENHA] [-O ARQUIVO]\n"
+            "       mkqr --vcard NOME [--phone TEL] [--email EMAIL] [-O ARQUIVO]\n"
+            "       mkqr - [-O ARQUIVO]              (lê o conteúdo do stdin)"
+        ),
         description="Gera um QR code a partir de um texto, URL, rede Wi-Fi ou contato.",
         epilog=(
             "exemplos:\n"
-            "  %(prog)s https://nodetp.com.br -O ~/Documents/nodetp-qrcode.png\n"
-            "  %(prog)s https://nodetp.com.br -O ~/Documents/   # nome automático\n"
-            "  %(prog)s 'texto qualquer' -O card.svg --dark '#0a2540'\n"
-            "  %(prog)s https://nodetp.com.br                   # mostra no terminal\n"
-            "  %(prog)s https://nodetp.com.br -c                # copia PNG para o clipboard\n"
-            "  %(prog)s https://nodetp.com.br -O site.png --open\n"
-            "  %(prog)s https://nodetp.com.br -O site.png --logo logo.png\n"
-            "  %(prog)s --wifi MinhaRede -p senha123 -O wifi.png\n"
-            "  %(prog)s --vcard 'Bernardo Silva' --phone +5511999999999 --email b@x.com -O card.png\n"
-            "  echo -n 'lido do stdin' | %(prog)s - -O out.png\n"
-            "  %(prog)s --install-completion                    # habilita Tab no bash"
+            "  mkqr https://nodetp.com.br                        # mostra no terminal\n"
+            "  mkqr https://nodetp.com.br -O ~/Documents/site.png\n"
+            "  mkqr https://nodetp.com.br -O ~/Documents/        # nome automático pelo conteúdo\n"
+            "  mkqr https://nodetp.com.br -c                     # copia PNG para o clipboard\n"
+            "  mkqr https://nodetp.com.br -O site.png --open     # salva e abre\n"
+            "  mkqr https://nodetp.com.br -O site.png --logo logo.png\n"
+            "  mkqr 'texto qualquer' -O card.svg --dark '#0a2540'\n"
+            "  mkqr https://nodetp.com.br -O site.png -b 4 --light white   # clássico, com margem\n"
+            "  mkqr --wifi MinhaRede -p senha123 -O wifi.png\n"
+            "  mkqr --vcard 'Ana Lima' --phone +5511999999999 --email ana@x.com -O ./\n"
+            "  echo -n 'lido do stdin' | mkqr - -O out.pdf\n"
+            "\n"
+            "formatos: .png .jpg .webp .svg .pdf .eps .txt (pelo sufixo de -O)\n"
+            "png/webp/svg saem recortados e transparentes; jpg/pdf/eps com fundo branco e margem."
         ),
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        formatter_class=ui.HelpFormatter,
+        add_help=False,
     )
-    data = p.add_argument("data", nargs="?", help="conteúdo do QR code (URL, texto). Use '-' para ler do stdin")
+    p._positionals.title = "conteúdo"
+
+    data = p.add_argument("data", nargs="?", metavar="TEXTO_OU_URL", help="conteúdo do QR code. Use '-' para ler do stdin")
     data.completer = NO_SUGGESTIONS  # type: ignore[attr-defined]
 
-    wifi = p.add_argument_group("Wi-Fi", "gera um QR que conecta à rede ao ser lido")
+    wifi = p.add_argument_group("wi-fi", "gera um QR que conecta à rede ao ser lido")
     ssid = wifi.add_argument("--wifi", metavar="SSID", help="nome da rede Wi-Fi (Tab lista as redes visíveis)")
     ssid.completer = wifi_ssid_completer  # type: ignore[attr-defined]
     pw = wifi.add_argument("-p", "--password", metavar="SENHA", help="senha da rede (omita para rede aberta)")
@@ -128,9 +141,9 @@ def build_parser() -> argparse.ArgumentParser:
     )
     wifi.add_argument("--hidden", action="store_true", help="rede oculta")
 
-    card = p.add_argument_group("Contato (vCard)", "gera um QR que salva o contato ao ser lido")
+    card = p.add_argument_group("contato (vCard)", "gera um QR que salva o contato ao ser lido")
     for flag, meta, hlp in (
-        ("--vcard", "NOME", "nome completo do contato, ex.: 'Bernardo Silva'"),
+        ("--vcard", "NOME", "nome completo do contato, ex.: 'Ana Lima'"),
         ("--phone", "TEL", "telefone, ex.: +5511999999999"),
         ("--email", "EMAIL", "e-mail"),
         ("--url", "URL", "site"),
@@ -140,43 +153,48 @@ def build_parser() -> argparse.ArgumentParser:
         a = card.add_argument(flag, metavar=meta, help=hlp)
         a.completer = NO_SUGGESTIONS  # type: ignore[attr-defined]
 
-    out = p.add_argument(
+    saida = p.add_argument_group("saída")
+    out = saida.add_argument(
         "-O", "--output", metavar="ARQUIVO",
-        help="arquivo de saída; formato pelo sufixo (.png .jpg .svg .pdf .eps .txt). "
-             "Se for um diretório, o nome é gerado a partir do conteúdo. Sem -O, imprime no terminal",
+        help="arquivo de saída; o formato vem do sufixo. Se for um diretório, o nome é gerado "
+             "a partir do conteúdo. Sem -O, mostra no terminal",
     )
     out.completer = FilesCompleter()  # type: ignore[attr-defined]
-    p.add_argument("-s", "--scale", type=int, default=10, help="tamanho de cada módulo em px (padrão: 10)")
-    p.add_argument(
+    saida.add_argument("-c", "--copy", action="store_true", help="copia o QR (PNG) para o clipboard via wl-copy")
+    saida.add_argument("--open", action="store_true", help="abre o arquivo gerado com xdg-open")
+    saida.add_argument("-f", "--force", action="store_true", help="sobrescreve o arquivo se já existir")
+    saida.add_argument("-q", "--quiet", action="store_true", help="não imprime o caminho gerado")
+
+    ap = p.add_argument_group("aparência")
+    ap.add_argument("-s", "--scale", type=int, default=10, metavar="PX", help="tamanho de cada módulo em px (padrão: 10)")
+    ap.add_argument(
         "-b", "--border", type=int, default=None, metavar="N",
         help="margem em módulos (padrão: 0 em png/svg/webp, 4 nos demais e no terminal)",
     )
-    p.add_argument(
+    ap.add_argument(
         "-e", "--error", choices=["L", "M", "Q", "H"], default=None,
-        help="nível de correção de erro: L 7%%, M 15%% (padrão), Q 25%%, H 30%% (padrão com --logo)",
+        help="correção de erro: L 7%%, M 15%% (padrão), Q 25%%, H 30%% (padrão com --logo)",
     )
-    dark = p.add_argument("--dark", default="#000", help="cor dos módulos escuros (padrão: #000)")
+    dark = ap.add_argument("--dark", default="#000", metavar="COR", help="cor dos módulos (padrão: #000)")
     dark.completer = ChoicesCompleter(COLORS)  # type: ignore[attr-defined]
-    light = p.add_argument(
+    light = ap.add_argument(
         "--light", default=None, metavar="COR",
         help="cor de fundo (padrão: transparente em png/svg/webp, branco nos demais). Ex.: --light white",
     )
     light.completer = ChoicesCompleter(COLORS)  # type: ignore[attr-defined]
-
-    logo = p.add_argument("--logo", metavar="IMAGEM", help="imagem (png/jpg/webp) para colocar no centro; só saída raster")
+    logo = ap.add_argument("--logo", metavar="IMAGEM", help="imagem (png/jpg/webp) no centro do QR; só saída raster")
     logo.completer = FilesCompleter(allowednames=("png", "jpg", "jpeg", "webp", "gif"))  # type: ignore[attr-defined]
-    p.add_argument(
+    ap.add_argument(
         "--logo-size", type=float, default=0.22, metavar="FRAÇÃO",
-        help="fração da largura do QR ocupada pelo logo, 0.1 a 0.3 (padrão: 0.22)",
+        help="fração da largura ocupada pelo logo, 0.1 a 0.3 (padrão: 0.22)",
     )
+    ap.add_argument("--micro", action="store_true", help="permite Micro QR quando o conteúdo couber")
 
-    p.add_argument("--micro", action="store_true", help="permite Micro QR quando o conteúdo couber")
-    p.add_argument("-c", "--copy", action="store_true", help="copia o QR (PNG) para o clipboard via wl-copy")
-    p.add_argument("--open", action="store_true", help="abre o arquivo gerado com xdg-open")
-    p.add_argument("-f", "--force", action="store_true", help="sobrescreve o arquivo se já existir")
-    p.add_argument("-q", "--quiet", action="store_true", help="não imprime o caminho gerado")
-    p.add_argument("--install-completion", action="store_true", help="instala o autocomplete do bash e sai")
-    p.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}")
+    outros = p.add_argument_group("outros")
+    outros.add_argument("-h", "--help", action="help", help="mostra esta ajuda e sai")
+    outros.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}", help="mostra a versão e sai")
+    outros.add_argument("--install-completion", action="store_true", help="instala o autocomplete do bash e sai")
+    outros.add_argument("--no-color", action="store_true", help="desliga as cores (ou defina NO_COLOR)")
     return p
 
 
@@ -307,6 +325,12 @@ def save(qr: segno.QRCode, out: Path, args: argparse.Namespace, light: str | Non
 def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     argcomplete.autocomplete(parser, default_completer=NO_SUGGESTIONS)
+    raw = sys.argv[1:] if argv is None else argv
+    if "--no-color" in raw:
+        ui.set_color(False)
+    if not [a for a in raw if a != "--no-color"]:
+        print(ui.quickstart(parser.prog))
+        return 0
     args = parser.parse_args(argv)
 
     if args.install_completion:

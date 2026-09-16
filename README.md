@@ -1,6 +1,6 @@
-# getqrcode / mkqr
+# mkqr
 
-Gere QR codes pela linha de comando com facilidade. `mkqr` e `getqrcode` são o mesmo comando.
+QR codes pela linha de comando, sem fricção. Digite `mkqr` sem argumentos para ver o guia rápido, ou `mkqr -h` para tudo.
 
 ```sh
 mkqr https://nodetp.com.br -O ~/Documents/nodetp-qrcode.png
@@ -24,9 +24,12 @@ JPG, PDF e EPS não têm transparência e saem com fundo branco e margem 4.
 ## Instalação
 
 ```sh
-pipx install .            # ou: pipx install -e .  para editar e usar direto
-mkqr --install-completion # habilita Tab no bash (flags, L/M/Q/H, cores, arquivos, redes Wi-Fi)
+git clone <repo> && cd mkqr
+./install.sh              # pipx + autocomplete do bash; use -e para modo editável
+./uninstall.sh            # remove tudo
 ```
+
+Manual: `pipx install .` e depois `mkqr --install-completion`.
 
 Dependências: [segno](https://github.com/heuer/segno) (QR), qrcode-artistic/Pillow (logo, jpg/webp),
 argcomplete (autocomplete). O clipboard usa `wl-copy` (wl-clipboard) e `--open` usa `xdg-open`.
@@ -48,3 +51,4 @@ argcomplete (autocomplete). O clipboard usa `wl-copy` (wl-clipboard) e `--open` 
 | `-f, --force` | sobrescreve arquivo existente | |
 | `-q, --quiet` | não imprime o caminho | |
 | `--install-completion` | grava o autocomplete do bash em `~/.local/share/bash-completion/completions/` | |
+| `--no-color` | desliga as cores (ou defina `NO_COLOR`) | |
