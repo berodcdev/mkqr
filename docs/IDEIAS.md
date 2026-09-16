@@ -3,6 +3,9 @@
 Gerado pela skill `sugerir`. Status: proposta · aceita · descartada · feita.
 Ideia descartada não volta a ser sugerida; o motivo fica registrado.
 
+## 2026-09-16 · a partir de "repo privado no GitHub com LICENSE, testes, CI e screenshot"
+- [ ] **Release v0.1.0** (P) — o repo tem 0 tags; `gh release create v0.1.0` com o wheel anexado dá um ponto de instalação estável sem clone · `.git` · _proposta_
+
 ## 2026-09-16 · a partir de "mkqr: nome definitivo, menu colorido e install/uninstall.sh" (estacionadas até organizar o repo para o GitHub)
 - [x] **Arquivo LICENSE** (P) — o pyproject declara MIT mas não existe LICENSE no repo (0 arquivos); GitHub e PyPI mostram "sem licença" · `pyproject.toml` · _feita_
 - [x] **Versão em um lugar só** (P) — `0.1.0` está duplicado em `pyproject.toml` e `src/mkqr/__init__.py`; hatch lê de `__version__` com `dynamic = ["version"]` · `pyproject.toml` · _feita_
