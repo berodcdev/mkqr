@@ -1,0 +1,20 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "getqrcode"
+version = "0.1.0"
+description = "Gere QR codes pela linha de comando com facilidade"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+authors = [{ name = "Bernardo" }]
+dependencies = ["segno>=1.6", "qrcode-artistic>=3.0", "argcomplete>=3.0"]
+
+[project.scripts]
+getqrcode = "getqrcode.cli:main"
+mkqr = "getqrcode.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/getqrcode"]
