@@ -3,6 +3,10 @@
 Gerado pela skill `sugerir`. Status: proposta · aceita · descartada · feita.
 Ideia descartada não volta a ser sugerida; o motivo fica registrado.
 
+## 2026-09-17 · a partir de "mkqr multiplataforma: Linux, macOS e Windows com CI"
+- [ ] **Autocomplete no PowerShell** (P) — Windows é a única célula com "—" na matriz do README para Tab; o argcomplete já gera o código de PowerShell (25 linhas), falta gravar no $PROFILE · `src/mkqr/platform.py` · _proposta_
+- [ ] **install.ps1 para Windows** (P) — hoje o Windows é o único sistema sem instalador: o README manda rodar `pipx install .` à mão; um .ps1 espelhando o install.sh fecha a matriz e pode entrar no CI windows-latest · `install.ps1` · _proposta_
+
 ## 2026-09-16 · a partir de "repo privado no GitHub com LICENSE, testes, CI e screenshot"
 - [ ] **Release v0.1.0** (P) — o repo tem 0 tags; `gh release create v0.1.0` com o wheel anexado dá um ponto de instalação estável sem clone · `.git` · _proposta_
 
