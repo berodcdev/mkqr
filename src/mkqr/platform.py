@@ -223,7 +223,8 @@ def install_completion(shell: str) -> list[str]:
     target = data_dir() / PROG / f"completion.{shell}"
     target.parent.mkdir(parents=True, exist_ok=True)
     target.write_text(code)
-    quoted = str(target).replace(str(home()), "$HOME", 1)
+    # sempre em forma POSIX: é o que bash/zsh entendem, inclusive no Git Bash do Windows
+    quoted = target.as_posix().replace(home().as_posix(), "$HOME", 1)
     if shell == "zsh":
         block = (
             f"{MARK_BEGIN}\n"
