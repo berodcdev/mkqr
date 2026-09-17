@@ -19,6 +19,8 @@ classifiers = [
   "Intended Audience :: End Users/Desktop",
   "Natural Language :: Portuguese (Brazilian)",
   "Operating System :: POSIX :: Linux",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",

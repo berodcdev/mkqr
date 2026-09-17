@@ -5,10 +5,7 @@ from __future__ import annotations
 
 import argparse
 import io
-import os
 import re
-import shutil
-import subprocess
 import sys
 from pathlib import Path
 
@@ -18,6 +15,7 @@ from argcomplete.completers import ChoicesCompleter, FilesCompleter
 from segno import helpers
 
 from . import __version__
+from . import platform as plat
 from . import ui
 
 RASTER = {".png", ".jpg", ".jpeg", ".webp"}
@@ -54,42 +52,25 @@ def resolve_output(raw: str | None, label: str) -> Path | None:
 # ---------------------------------------------------------------- autocomplete
 
 def wifi_ssid_completer(prefix: str, **_: object) -> list[str]:
-    """Sugere as redes Wi-Fi visíveis (via nmcli), se disponível."""
-    tool = shutil.which("nmcli")
-    if tool is None:
-        return []
-    try:
-        out = subprocess.run(
-            [tool, "-t", "-f", "SSID", "dev", "wifi", "list"],
-            capture_output=True, text=True, timeout=3, check=False,
-        ).stdout
-    except (OSError, subprocess.TimeoutExpired):
-        return []
-    seen: dict[str, None] = {}
-    for line in out.splitlines():
-        ssid = line.replace("\\:", ":").strip()
-        if ssid and ssid.startswith(prefix):
-            seen[ssid] = None
-    return list(seen)
+    return plat.wifi_ssids(prefix)
 
 
-def completion_dir() -> Path:
-    base = os.environ.get("BASH_COMPLETION_USER_DIR")
-    if base:
-        return Path(base) / "completions"
-    xdg = os.environ.get("XDG_DATA_HOME") or str(Path.home() / ".local" / "share")
-    return Path(xdg) / "bash-completion" / "completions"
+def install_completion(shell_opt: str | None) -> int:
+    shells = list(plat.SHELLS) if shell_opt == "all" else [shell_opt or plat.current_shell() or "bash"]
+    for sh in shells:
+        for line in plat.install_completion(sh):
+            print(f"  {line}")
+    dica = "abra um novo terminal" if len(shells) > 1 else f"abra um novo terminal ou rode `exec {shells[0]}`"
+    print(f"pronto: {dica} e use Tab depois de mkqr")
+    return 0
 
 
-def install_completion() -> int:
-    """Grava o arquivo de completion do bash para o mkqr."""
-    target = completion_dir()
-    target.mkdir(parents=True, exist_ok=True)
-    for cmd in COMMANDS:
-        code = argcomplete.shellcode([cmd], shell="bash")
-        (target / cmd).write_text(code)
-        print(target / cmd)
-    print("pronto: abra um novo terminal (ou rode `exec bash`) e use Tab depois de mkqr")
+def uninstall_completion() -> int:
+    removed = plat.uninstall_completion()
+    for item in removed:
+        print(f"  removido: {item}")
+    if not removed:
+        print("nada para remover")
     return 0
 
 
@@ -160,8 +141,8 @@ def build_parser() -> argparse.ArgumentParser:
              "a partir do conteúdo. Sem -O, mostra no terminal",
     )
     out.completer = FilesCompleter()  # type: ignore[attr-defined]
-    saida.add_argument("-c", "--copy", action="store_true", help="copia o QR (PNG) para o clipboard via wl-copy")
-    saida.add_argument("--open", action="store_true", help="abre o arquivo gerado com xdg-open")
+    saida.add_argument("-c", "--copy", action="store_true", help="copia o QR (PNG) para o clipboard")
+    saida.add_argument("--open", action="store_true", help="abre o arquivo gerado no visualizador padrão")
     saida.add_argument("-f", "--force", action="store_true", help="sobrescreve o arquivo se já existir")
     saida.add_argument("-q", "--quiet", action="store_true", help="não imprime o caminho gerado")
 
@@ -193,7 +174,12 @@ def build_parser() -> argparse.ArgumentParser:
     outros = p.add_argument_group("outros")
     outros.add_argument("-h", "--help", action="help", help="mostra esta ajuda e sai")
     outros.add_argument("-V", "--version", action="version", version=f"%(prog)s {__version__}", help="mostra a versão e sai")
-    outros.add_argument("--install-completion", action="store_true", help="instala o autocomplete do bash e sai")
+    outros.add_argument("--install-completion", action="store_true", help="instala o autocomplete (bash, zsh ou fish) e sai")
+    outros.add_argument(
+        "--shell", choices=[*plat.SHELLS, "all"], default=None,
+        help="shell alvo do --install-completion (padrão: o seu $SHELL)",
+    )
+    outros.add_argument("--uninstall-completion", action="store_true", help="remove o autocomplete de todos os shells e sai")
     outros.add_argument("--no-color", action="store_true", help="desliga as cores (ou defina NO_COLOR)")
     return p
 
@@ -278,32 +264,6 @@ def png_bytes(qr: segno.QRCode, args: argparse.Namespace, light: str | None) -> 
     return buf.getvalue()
 
 
-def copy_to_clipboard(data: bytes) -> bool:
-    tool = shutil.which("wl-copy")
-    if tool is None:
-        print("erro: wl-copy não encontrado (instale wl-clipboard)", file=sys.stderr)
-        return False
-    try:
-        subprocess.run([tool, "--type", "image/png"], input=data, check=True, timeout=10)
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError) as exc:
-        print(f"erro ao copiar para o clipboard: {exc}", file=sys.stderr)
-        return False
-    return True
-
-
-def open_file(path: Path) -> None:
-    tool = shutil.which("xdg-open")
-    if tool is None:
-        print("aviso: xdg-open não encontrado, não foi possível abrir", file=sys.stderr)
-        return
-    subprocess.Popen(
-        [tool, str(path)],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-        start_new_session=True,
-    )
-
-
 def save(qr: segno.QRCode, out: Path, args: argparse.Namespace, light: str | None) -> None:
     suffix = out.suffix.lower()
     if args.logo or suffix in RASTER - {".png"}:
@@ -323,6 +283,12 @@ def save(qr: segno.QRCode, out: Path, args: argparse.Namespace, light: str | Non
 # ---------------------------------------------------------------- main
 
 def main(argv: list[str] | None = None) -> int:
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure") and (stream.encoding or "").lower().replace("-", "") != "utf8":
+            try:
+                stream.reconfigure(encoding="utf-8", errors="replace")
+            except (ValueError, OSError):
+                pass
     parser = build_parser()
     argcomplete.autocomplete(parser, default_completer=NO_SUGGESTIONS)
     raw = sys.argv[1:] if argv is None else argv
@@ -334,7 +300,9 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     if args.install_completion:
-        return install_completion()
+        return install_completion(args.shell)
+    if args.uninstall_completion:
+        return uninstall_completion()
 
     data, label = build_content(args, parser)
     error = args.error or ("H" if args.logo else "M")
@@ -361,10 +329,12 @@ def main(argv: list[str] | None = None) -> int:
 
     try:
         if args.copy:
-            if not copy_to_clipboard(png_bytes(qr, args, light)):
+            ok, info = plat.copy_png(png_bytes(qr, args, light))
+            if not ok:
+                print(f"erro: {info}", file=sys.stderr)
                 return 1
             if not args.quiet:
-                print("QR copiado para o clipboard (PNG)")
+                print(f"QR copiado para o clipboard (PNG, via {info})")
 
         if out is None:
             if args.open:
@@ -388,7 +358,9 @@ def main(argv: list[str] | None = None) -> int:
     if not args.quiet:
         print(out)
     if args.open:
-        open_file(out)
+        err = plat.open_path(out)
+        if err:
+            print(f"aviso: {err}", file=sys.stderr)
     return 0
 
 

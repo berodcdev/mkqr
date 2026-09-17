@@ -33,8 +33,24 @@ git clone https://github.com/berodcdev/mkqr.git && cd mkqr
 
 Manual: `pipx install .` e depois `mkqr --install-completion`.
 
+No Windows (sem bash): `pipx install .` e pronto. Autocomplete não é instalado no PowerShell.
+
 Dependências: [segno](https://github.com/heuer/segno) (QR), qrcode-artistic/Pillow (logo, jpg/webp),
-argcomplete (autocomplete). O clipboard usa `wl-copy` (wl-clipboard) e `--open` usa `xdg-open`.
+argcomplete (autocomplete).
+
+## Plataformas
+
+| | Linux | macOS | Windows |
+|---|---|---|---|
+| gerar QR (png, svg, pdf, terminal, Wi-Fi, vCard, logo) | ✓ | ✓ | ✓ |
+| `-c` clipboard | `wl-copy` (Wayland) ou `xclip` (X11) | nativo (`osascript`) | nativo (PowerShell) |
+| `--open` | `xdg-open` | nativo (`open`) | nativo |
+| autocomplete | bash, zsh, fish | bash, zsh, fish | — |
+| Tab lista redes Wi-Fi | `nmcli` | — | — |
+| `install.sh` / `uninstall.sh` | ✓ | ✓ (bash 3.2 ok) | via `pipx install .` |
+
+`mkqr --install-completion` detecta o seu `$SHELL`; force com `--shell zsh` (ou `bash`, `fish`, `all`).
+`mkqr --uninstall-completion` desfaz tudo. O CI roda em Ubuntu, macOS e Windows.
 
 ## Opções
 
@@ -46,13 +62,14 @@ argcomplete (autocomplete). O clipboard usa `wl-copy` (wl-clipboard) e `--open` 
 | `-e, --error` | correção de erro L/M/Q/H | M (H com `--logo`) |
 | `--dark`, `--light` | cores; `--light white` para fundo branco | #000 / transparente |
 | `--logo IMAGEM` | imagem no centro (png/jpg/webp); `--logo-size` 0.1 a 0.3 | 0.22 |
-| `-c, --copy` | copia o QR (PNG) para o clipboard via `wl-copy` | |
-| `--open` | abre o arquivo gerado com `xdg-open` | |
+| `-c, --copy` | copia o QR (PNG) para o clipboard | |
+| `--open` | abre o arquivo gerado no visualizador padrão | |
 | `--wifi SSID` | QR de rede Wi-Fi; com `-p SENHA`, `--security WPA/WEP/nopass`, `--hidden` | |
 | `--vcard NOME` | QR de contato; com `--phone`, `--email`, `--url`, `--org`, `--title` | |
 | `-f, --force` | sobrescreve arquivo existente | |
 | `-q, --quiet` | não imprime o caminho | |
-| `--install-completion` | grava o autocomplete do bash em `~/.local/share/bash-completion/completions/` | |
+| `--install-completion` | instala o autocomplete do seu shell; `--shell bash/zsh/fish/all` | |
+| `--uninstall-completion` | remove o autocomplete de todos os shells | |
 | `--no-color` | desliga as cores (ou defina `NO_COLOR`) | |
 
 ## Desenvolvimento

@@ -5,13 +5,23 @@ on:
     branches: [main]
   pull_request:
 
+env:
+  NO_COLOR: "1"
+  PYTHONUTF8: "1"
+
 jobs:
   test:
-    runs-on: ubuntu-latest
+    name: testes (${{ matrix.os }}, py${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python: ["3.10", "3.11", "3.12", "3.13", "3.14"]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.10", "3.14"]
+        include:
+          - { os: ubuntu-latest, python: "3.11" }
+          - { os: ubuntu-latest, python: "3.12" }
+          - { os: ubuntu-latest, python: "3.13" }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -22,27 +32,88 @@ jobs:
       - name: Testes
         run: pytest -q
       - name: Fumaça
-        env:
-          NO_COLOR: "1"
+        shell: bash
         run: |
           mkqr -V
           mkqr
+          mkqr -h > /dev/null
           mkqr https://github.com/berodcdev/mkqr -O smoke.png
+          mkqr https://github.com/berodcdev/mkqr -O smoke.jpg
           mkqr --wifi CI -p senha -O smoke-wifi.svg
-          test -s smoke.png && test -s smoke-wifi.svg
+          mkqr --vcard 'Ana Lima' --phone +5511999999999 -O ./
+          echo -n stdin | mkqr - -O smoke.pdf
+          mkqr https://github.com/berodcdev/mkqr          # terminal (unicode)
+          test -s smoke.png && test -s smoke.jpg && test -s smoke-wifi.svg && test -s smoke.pdf
+      - name: Protocolo de autocomplete (bash e zsh)
+        if: runner.os != 'Windows'
+        shell: bash
+        run: |
+          comp() { env _ARGCOMPLETE=1 _ARGCOMPLETE_SHELL="$2" _ARGCOMPLETE_IFS=$'\n' COMP_LINE="$1" COMP_POINT=${#1} COMP_TYPE=9 _ARGCOMPLETE_SUPPRESS_SPACE=0 mkqr 8>&1 9>/dev/null 1>/dev/null; }
+          comp 'mkqr -e ' bash | tr '\n' ' ' | grep -q 'L M Q H'
+          comp 'mkqr --vc' bash | grep -q -- '--vcard'
+          comp 'mkqr --security ' zsh | tr '\n' ' ' | grep -q 'WPA'
+          echo "autocomplete ok"
 
   install-script:
-    runs-on: ubuntu-latest
+    name: install.sh (${{ matrix.os }}, ${{ matrix.shell }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest, shell: bash }
+          - { os: ubuntu-latest, shell: zsh }
+          - { os: macos-latest,  shell: zsh }
+          - { os: macos-latest,  shell: bash }
+          - { os: macos-latest,  shell: fish }
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: install.sh
-        run: NO_COLOR=1 ./install.sh --no-completion
-      - name: mkqr instalado
-        run: '"$(pipx environment --value PIPX_BIN_DIR)/mkqr" -V'
-      - name: uninstall.sh
+      - name: Garante pipx e o shell alvo
+        shell: bash
         run: |
-          NO_COLOR=1 ./uninstall.sh
+          command -v pipx || pip install pipx
+          case "${{ matrix.shell }}" in
+            zsh)  command -v zsh  || sudo apt-get install -y zsh ;;
+            fish) command -v fish || brew install fish ;;
+          esac
+      - name: install.sh
+        shell: bash
+        run: ./install.sh --shell ${{ matrix.shell }}
+      - name: mkqr instalado e completion no lugar
+        shell: bash
+        run: |
+          BIN="$(pipx environment --value PIPX_BIN_DIR)"
+          "$BIN/mkqr" -V
+          case "${{ matrix.shell }}" in
+            bash) ls "$HOME/.local/share/bash-completion/completions/mkqr" 2>/dev/null || grep -q 'mkqr completion' "$HOME/.bashrc" ;;
+            zsh)  grep -q 'mkqr completion' "$HOME/.zshrc" && test -f "$HOME/.local/share/mkqr/completion.zsh" ;;
+            fish) test -f "$HOME/.config/fish/completions/mkqr.fish" ;;
+          esac
+      - name: Completion funciona no shell de verdade
+        shell: bash
+        run: |
+          export PATH="$(pipx environment --value PIPX_BIN_DIR):$PATH"
+          case "${{ matrix.shell }}" in
+            zsh)
+              zsh -ic 'source ~/.zshrc; (( $+functions[_python_argcomplete] )) && echo "zsh: função de completion carregada"' ;;
+            fish)
+              fish -c 'complete -C "mkqr --vc"' | grep -q -- '--vcard' && echo "fish: completou --vcard" ;;
+            bash)
+              if [ -f "$HOME/.local/share/bash-completion/completions/mkqr" ]; then
+                bash -ic 'source /usr/share/bash-completion/bash_completion 2>/dev/null || source "$(brew --prefix)/etc/profile.d/bash_completion.sh" 2>/dev/null || source ~/.local/share/bash-completion/completions/mkqr; _comp_load mkqr 2>/dev/null || __load_completion mkqr 2>/dev/null || true; complete -p mkqr' | grep -q _python_argcomplete
+              else
+                bash -ic 'source ~/.bashrc; complete -p mkqr' | grep -q _python_argcomplete
+              fi
+              echo "bash: completion registrada" ;;
+          esac
+      - name: uninstall.sh
+        shell: bash
+        run: |
+          ./uninstall.sh
           ! test -e "$(pipx environment --value PIPX_BIN_DIR)/mkqr"
+          ! test -e "$HOME/.local/share/mkqr/completion.zsh"
+          ! test -e "$HOME/.config/fish/completions/mkqr.fish"
+          ! grep -q 'mkqr completion' "$HOME/.zshrc" 2>/dev/null
