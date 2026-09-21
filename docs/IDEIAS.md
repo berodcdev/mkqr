@@ -3,12 +3,15 @@
 Gerado pela skill `sugerir`. Status: proposta · aceita · descartada · feita.
 Ideia descartada não volta a ser sugerida; o motivo fica registrado.
 
+## 2026-09-21 · a partir de "Abertura do mkqr como open source"
+- [ ] **Dar um giro de teste no release.yml** (P) — o workflow tem 4 jobs e 0 execuções: a tag v0.1.0 foi criada à mão antes de ele ser religado, então o caminho tag → testes → build → Release nunca rodou de verdade; um `workflow_dispatch` valida antes da v0.2.0 · `.github/workflows/release.yml` · _proposta_
+
 ## 2026-09-17 · a partir de "mkqr multiplataforma: Linux, macOS e Windows com CI"
 - [ ] **Autocomplete no PowerShell** (P) — Windows é a única célula com "—" na matriz do README para Tab; o argcomplete já gera o código de PowerShell (19 linhas), falta gravar no $PROFILE · `src/mkqr/platform.py` · _proposta_
 - [ ] **install.ps1 para Windows** (P) — hoje o Windows é o único sistema sem instalador: o README manda rodar `pipx install .` à mão; um .ps1 espelhando o install.sh fecha a matriz e pode entrar no CI windows-latest · `install.ps1` · _proposta_
 
 ## 2026-09-16 · a partir de "repo privado no GitHub com LICENSE, testes, CI e screenshot"
-- [ ] **Release v0.1.0** (P) — o repo tem 0 tags; `gh release create v0.1.0` com o wheel anexado dá um ponto de instalação estável sem clone · `.git` · _proposta_
+- [x] **Release v0.1.0** (P) — o repo tem 0 tags; `gh release create v0.1.0` com o wheel anexado dá um ponto de instalação estável sem clone · `.git` · _feita_
 
 ## 2026-09-16 · a partir de "mkqr: nome definitivo, menu colorido e install/uninstall.sh" (estacionadas até organizar o repo para o GitHub)
 - [x] **Arquivo LICENSE** (P) — o pyproject declara MIT mas não existe LICENSE no repo (0 arquivos); GitHub e PyPI mostram "sem licença" · `pyproject.toml` · _feita_
