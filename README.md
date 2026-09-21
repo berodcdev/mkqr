@@ -1,84 +1,124 @@
 # mkqr
 
-QR codes pela linha de comando, sem fricção. Digite `mkqr` sem argumentos para ver o guia rápido, ou `mkqr -h` para tudo.
+**QR codes from the command line, without friction.** PNG, SVG, PDF, Wi-Fi, vCard, logo, clipboard.
 
-![mkqr no terminal](docs/img/mkqr.svg)
+[![CI](https://github.com/berodcdev/mkqr/actions/workflows/ci.yml/badge.svg)](https://github.com/berodcdev/mkqr/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/mkqr.svg)](https://pypi.org/project/mkqr/)
+[![Python](https://img.shields.io/pypi/pyversions/mkqr.svg)](https://pypi.org/project/mkqr/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
+🇧🇷 [Leia em português](README.pt-BR.md)
+
+<img src="https://raw.githubusercontent.com/berodcdev/mkqr/main/docs/img/mkqr.png" alt="mkqr running in a terminal" width="720">
+
+> **Note:** mkqr's help text and messages are in Brazilian Portuguese. Flags and
+> output formats are the usual English ones, so the examples below work as-is.
+
+## Install
 
 ```sh
-mkqr https://nodetp.com.br -O ~/Documents/nodetp-qrcode.png
-mkqr https://nodetp.com.br -O ~/Documents/          # nome automático: nodetp.com.br-qrcode.png
-mkqr https://nodetp.com.br                          # mostra no terminal
-mkqr https://nodetp.com.br -c                       # copia o PNG para o clipboard
-mkqr https://nodetp.com.br -O site.png --open       # salva e abre no visualizador
-mkqr https://nodetp.com.br -O site.png --logo logo.png   # logo no centro
-mkqr 'texto' -O card.svg --dark '#0a2540'
-mkqr --wifi MinhaRede -p senha123 -O ./             # QR que conecta na rede
-mkqr --vcard 'Bernardo Silva' --phone +5511999999999 --email b@x.com --org NodeTP -O ./
-echo -n 'lido do stdin' | mkqr - -O out.pdf
+pipx install mkqr        # recommended: isolated, on your PATH
+pip install mkqr         # or into the current environment
 ```
 
-Formato de saída pelo sufixo: `.png .jpg .webp .svg .pdf .eps .txt`. Sem `-O`, imprime no terminal.
+Then, optionally, enable Tab completion for your shell:
 
-**PNG, WebP e SVG saem recortados e com fundo transparente** (sem margem), prontos para colocar em
-qualquer layout. Para a versão clássica com margem branca: `-b 4 --light white`.
-JPG, PDF e EPS não têm transparência e saem com fundo branco e margem 4.
+```sh
+mkqr --install-completion
+```
 
-## Instalação
+<details>
+<summary>Install from source</summary>
 
 ```sh
 git clone https://github.com/berodcdev/mkqr.git && cd mkqr
-./install.sh              # pipx + autocomplete do bash; use -e para modo editável
-./uninstall.sh            # remove tudo
+./install.sh              # pipx + shell completion; -e for editable mode
+./uninstall.sh            # removes everything
 ```
 
-Manual: `pipx install .` e depois `mkqr --install-completion`.
+On Windows without bash, `pipx install .` is enough.
+</details>
 
-No Windows (sem bash): `pipx install .` e pronto. Autocomplete não é instalado no PowerShell.
+## Usage
 
-Dependências: [segno](https://github.com/heuer/segno) (QR), qrcode-artistic/Pillow (logo, jpg/webp),
-argcomplete (autocomplete).
+Type `mkqr` with no arguments for a quick guide, or `mkqr -h` for everything.
 
-## Plataformas
+```sh
+mkqr https://example.com                          # print the QR in the terminal
+mkqr https://example.com -O qr.png                # save to a file
+mkqr https://example.com -O ~/Documents/          # auto-name: example.com-qrcode.png
+mkqr https://example.com -c                       # copy the PNG to the clipboard
+mkqr https://example.com -O qr.png --open         # save and open in the default viewer
+mkqr https://example.com -O qr.png --logo logo.png    # logo in the center
+mkqr 'any text' -O card.svg --dark '#0a2540'      # custom color
+mkqr --wifi MyNetwork -p hunter2 -O ./            # QR that joins the network
+mkqr --vcard 'Ana Lima' --phone +15551234567 --email ana@example.com -O ./
+echo -n 'read from stdin' | mkqr - -O out.pdf
+```
+
+The output format comes from the suffix of `-O`: `.png .jpg .webp .svg .pdf .eps .txt`.
+Without `-O`, the QR is printed to the terminal.
+
+**PNG, WebP and SVG come out cropped and transparent** (no quiet zone), ready to drop
+into any layout. For the classic look with a white margin, use `-b 4 --light white`.
+JPG, PDF and EPS have no alpha channel, so they get a white background and a margin of 4.
+
+## Platform support
 
 | | Linux | macOS | Windows |
 |---|---|---|---|
-| gerar QR (png, svg, pdf, terminal, Wi-Fi, vCard, logo) | ✓ | ✓ | ✓ |
-| `-c` clipboard | `wl-copy` (Wayland) ou `xclip` (X11) | nativo (`osascript`) | nativo (PowerShell) |
-| `--open` | `xdg-open` | nativo (`open`) | nativo |
-| autocomplete | bash, zsh, fish | bash, zsh, fish | — |
-| Tab lista redes Wi-Fi | `nmcli` | — | — |
-| `install.sh` / `uninstall.sh` | ✓ | ✓ (bash 3.2 ok) | via `pipx install .` |
+| generate QR (png, svg, pdf, terminal, Wi-Fi, vCard, logo) | ✓ | ✓ | ✓ |
+| `-c` clipboard | `wl-copy` (Wayland) or `xclip` (X11) | native (`osascript`) | native (PowerShell) |
+| `--open` | `xdg-open` | native (`open`) | native |
+| shell completion | bash, zsh, fish | bash, zsh, fish | — |
+| Tab lists nearby Wi-Fi networks | `nmcli` | — | — |
+| `install.sh` / `uninstall.sh` | ✓ | ✓ (bash 3.2 ok) | use `pipx install .` |
 
-`mkqr --install-completion` detecta o seu `$SHELL`; force com `--shell zsh` (ou `bash`, `fish`, `all`).
-`mkqr --uninstall-completion` desfaz tudo. O CI roda em Ubuntu, macOS e Windows.
+`mkqr --install-completion` detects your `$SHELL`; override it with `--shell zsh`
+(or `bash`, `fish`, `all`). `mkqr --uninstall-completion` reverses it.
+CI runs the test suite on Ubuntu, macOS and Windows.
 
-## Opções
+## Options
 
-| flag | descrição | padrão |
+| flag | description | default |
 |---|---|---|
-| `-O, --output` | arquivo ou diretório de saída | terminal |
-| `-s, --scale` | px por módulo | 10 |
-| `-b, --border` | margem em módulos | 0 (png/svg/webp), 4 (demais) |
-| `-e, --error` | correção de erro L/M/Q/H | M (H com `--logo`) |
-| `--dark`, `--light` | cores; `--light white` para fundo branco | #000 / transparente |
-| `--logo IMAGEM` | imagem no centro (png/jpg/webp); `--logo-size` 0.1 a 0.3 | 0.22 |
-| `-c, --copy` | copia o QR (PNG) para o clipboard | |
-| `--open` | abre o arquivo gerado no visualizador padrão | |
-| `--wifi SSID` | QR de rede Wi-Fi; com `-p SENHA`, `--security WPA/WEP/nopass`, `--hidden` | |
-| `--vcard NOME` | QR de contato; com `--phone`, `--email`, `--url`, `--org`, `--title` | |
-| `-f, --force` | sobrescreve arquivo existente | |
-| `-q, --quiet` | não imprime o caminho | |
-| `--install-completion` | instala o autocomplete do seu shell; `--shell bash/zsh/fish/all` | |
-| `--uninstall-completion` | remove o autocomplete de todos os shells | |
-| `--no-color` | desliga as cores (ou defina `NO_COLOR`) | |
+| `-O, --output` | output file or directory | terminal |
+| `-s, --scale` | pixels per module | 10 |
+| `-b, --border` | quiet zone in modules | 0 (png/svg/webp), 4 (others) |
+| `-e, --error` | error correction L/M/Q/H | M (H with `--logo`) |
+| `--dark`, `--light` | colors; `--light white` for a white background | `#000` / transparent |
+| `--logo IMAGE` | image in the center (png/jpg/webp); `--logo-size` 0.1–0.3 | 0.22 |
+| `-c, --copy` | copy the QR (as PNG) to the clipboard | |
+| `--open` | open the generated file in the default viewer | |
+| `--wifi SSID` | Wi-Fi QR; with `-p PASSWORD`, `--security WPA/WEP/nopass`, `--hidden` | |
+| `--vcard NAME` | contact QR; with `--phone`, `--email`, `--url`, `--org`, `--title` | |
+| `--micro` | allow Micro QR when the content fits | |
+| `-f, --force` | overwrite an existing file | |
+| `-q, --quiet` | don't print the output path | |
+| `--install-completion` | install shell completion; `--shell bash/zsh/fish/all` | |
+| `--uninstall-completion` | remove completion from every shell | |
+| `--no-color` | disable colors (or set `NO_COLOR`) | |
 
-## Desenvolvimento
+The full help (`mkqr -h`) is also available as an image: [docs/img/mkqr-help.svg](docs/img/mkqr-help.svg).
+
+## Built on
+
+[segno](https://github.com/heuer/segno) for QR generation,
+[qrcode-artistic](https://github.com/heuer/qrcode-artistic)/Pillow for logos and jpg/webp,
+[argcomplete](https://github.com/kislyuk/argcomplete) for shell completion.
+
+## Development
 
 ```sh
-./install.sh -e                      # instala em modo editável
+git clone https://github.com/berodcdev/mkqr.git && cd mkqr
 python -m venv .venv && . .venv/bin/activate
-pip install -e ".[dev]" && pytest    # testes
+pip install -e ".[dev]"
+pytest
 ```
 
-A ajuda completa (`mkqr -h`) está em [docs/img/mkqr-help.svg](docs/img/mkqr-help.svg).
-Licença MIT.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow, and
+[CHANGELOG.md](CHANGELOG.md) for what changed between releases.
+
+## License
+
+MIT — see [LICENSE](LICENSE).

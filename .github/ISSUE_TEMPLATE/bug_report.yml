@@ -1,0 +1,66 @@
+name: Reportar um bug
+description: Algo não funciona como deveria
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Obrigado pelo relato! Se for uma **vulnerabilidade de segurança**, não use
+        este formulário — veja [SECURITY.md](../blob/main/SECURITY.md).
+
+        Bug reports in English are welcome too.
+  - type: textarea
+    id: o-que-acontece
+    attributes:
+      label: O que acontece
+      description: E o que você esperava que acontecesse.
+    validations:
+      required: true
+  - type: textarea
+    id: reproducao
+    attributes:
+      label: Como reproduzir
+      description: O comando exato e a saída, incluindo mensagens de erro.
+      placeholder: |
+        $ mkqr https://exemplo.com -O ./saida/
+        erro: ...
+      render: shell
+    validations:
+      required: true
+  - type: input
+    id: versao
+    attributes:
+      label: Versão do mkqr
+      description: "Saída de `mkqr -V`"
+      placeholder: mkqr 0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: so
+    attributes:
+      label: Sistema operacional
+      options: [Linux, macOS, Windows, outro]
+    validations:
+      required: true
+  - type: input
+    id: detalhe-so
+    attributes:
+      label: Detalhe do sistema
+      description: "Distribuição e sessão gráfica no Linux (ex.: Fedora 41, Wayland); versão do macOS ou Windows."
+      placeholder: Ubuntu 24.04, Wayland
+  - type: dropdown
+    id: shell
+    attributes:
+      label: Shell
+      options: [bash, zsh, fish, PowerShell, outro]
+  - type: input
+    id: python
+    attributes:
+      label: Versão do Python
+      description: "Saída de `python3 --version`"
+      placeholder: Python 3.12.7
+  - type: dropdown
+    id: instalacao
+    attributes:
+      label: Como instalou
+      options: [pipx install mkqr, pip install mkqr, "./install.sh", "./install.sh -e", outro]

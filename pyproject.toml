@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
 license-files = ["LICENSE"]
-authors = [{ name = "Bernardo" }]
+authors = [{ name = "Bernardo", email = "dev@bernardorodc.com" }]
 keywords = ["qr", "qrcode", "cli", "wifi", "vcard", "segno"]
 classifiers = [
   "Development Status :: 4 - Beta",
@@ -33,11 +33,13 @@ classifiers = [
 dependencies = ["segno>=1.6", "qrcode-artistic>=3.0", "argcomplete>=3.0"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8"]
+dev = ["pytest>=8", "build>=1.2"]
 
 [project.urls]
 Homepage = "https://github.com/berodcdev/mkqr"
+Repository = "https://github.com/berodcdev/mkqr"
 Issues = "https://github.com/berodcdev/mkqr/issues"
+Changelog = "https://github.com/berodcdev/mkqr/blob/main/CHANGELOG.md"
 
 [project.scripts]
 mkqr = "mkqr.cli:main"

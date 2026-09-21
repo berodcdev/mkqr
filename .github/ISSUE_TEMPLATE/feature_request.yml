@@ -1,0 +1,39 @@
+name: Sugerir uma melhoria
+description: Uma ideia de funcionalidade ou mudança
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        O mkqr tenta fazer uma coisa bem: gerar QR code no terminal, sem cerimônia.
+        Ideias que mantêm isso verdadeiro têm mais chance de entrar.
+
+        Feature requests in English are welcome too.
+  - type: textarea
+    id: problema
+    attributes:
+      label: Qual problema isso resolve
+      description: O que você está tentando fazer hoje e onde o mkqr atrapalha.
+    validations:
+      required: true
+  - type: textarea
+    id: proposta
+    attributes:
+      label: Como você imagina que funcionaria
+      description: De preferência com o comando que você gostaria de digitar.
+      placeholder: mkqr --read foto.png
+    validations:
+      required: true
+  - type: textarea
+    id: alternativas
+    attributes:
+      label: Alternativas que você considerou
+  - type: checkboxes
+    id: confirmacoes
+    attributes:
+      label: Antes de enviar
+      options:
+        - label: Procurei nas issues abertas e fechadas e não achei nada igual
+          required: true
+        - label: Olhei `mkqr -h` e a funcionalidade ainda não existe
+          required: true

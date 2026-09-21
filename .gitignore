@@ -1,6 +1,17 @@
+# Python
 __pycache__/
 *.pyc
 dist/
 build/
 *.egg-info/
 .venv/
+.pytest_cache/
+
+# QR codes gerados ao testar a CLI na mão
+*-qrcode.png
+*-qrcode.svg
+smoke.*
+smoke-wifi.*
+
+# Sistema
+.DS_Store
