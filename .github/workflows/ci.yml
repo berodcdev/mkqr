@@ -31,8 +31,8 @@ jobs:
           - { os: ubuntu-latest, python: "3.12" }
           - { os: ubuntu-latest, python: "3.13" }
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
           cache: pip
@@ -77,8 +77,8 @@ jobs:
           - { os: macos-latest,  shell: bash }
           - { os: macos-latest,  shell: fish }
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
@@ -134,8 +134,8 @@ jobs:
     name: screenshots em dia
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           # fixa a versão: a formatação do argparse pode variar entre releases do
           # Python, e o SVG é gerado a partir da saída literal de `mkqr -h`
