@@ -9,7 +9,7 @@
 
 🇧🇷 [Leia em português](README.pt-BR.md)
 
-<img src="https://raw.githubusercontent.com/berodcdev/mkqr/main/docs/img/mkqr.png" alt="mkqr running in a terminal" width="720">
+<img src="https://raw.githubusercontent.com/berodcdev/mkqr/main/docs/img/demo.gif" alt="mkqr generating QR codes in a terminal" width="820">
 
 > **Note:** mkqr's help text and messages are in Brazilian Portuguese. Flags and
 > output formats are the usual English ones, so the examples below work as-is.
@@ -102,7 +102,8 @@ CI runs the test suite on Ubuntu, macOS and Windows, from Python 3.10 to 3.14.
 | `--uninstall-completion` | remove completion from every shell | |
 | `--no-color` | disable colors (or set `NO_COLOR`) | |
 
-The full help (`mkqr -h`) is also available as an image: [docs/img/mkqr-help.svg](docs/img/mkqr-help.svg).
+The full help (`mkqr -h`) is also available as an image: [docs/img/mkqr-help.svg](docs/img/mkqr-help.svg),
+and the quick guide as [docs/img/mkqr.svg](docs/img/mkqr.svg).
 
 ## Built on
 

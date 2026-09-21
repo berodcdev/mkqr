@@ -73,8 +73,19 @@ O CI tem um job (`screenshots em dia`) que regera e falha se o resultado diferir
 do que está commitado. Ele usa **Python 3.13** — se o seu diff só aparece em outra
 versão, é a formatação do argparse que mudou, não o seu código.
 
-O `docs/img/mkqr.png` (usado no README em inglês, porque o PyPI não renderiza
-o SVG) é regerado com Chrome headless — o próprio script imprime o comando.
+### O GIF do README
+
+`docs/img/demo.gif` é gravado pelo [VHS](https://github.com/charmbracelet/vhs) a
+partir de `docs/demo.tape`, que é um roteiro versionado — ninguém precisa gravar
+a tela à mão:
+
+```sh
+brew install vhs       # traz ttyd e ffmpeg junto
+vhs docs/demo.tape
+```
+
+A gravação roda num diretório temporário e exige o `mkqr` no PATH. Se você mudar
+o banner, a ajuda ou algum texto que aparece no roteiro, regrave o GIF junto.
 
 ## Estilo
 

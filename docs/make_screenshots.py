@@ -187,10 +187,7 @@ def main() -> int:
         destino.write_text(svg)
         w, h = re.search(r'width="(\d+)" height="(\d+)"', svg).groups()
         print(f"{'=' if svg == antes else '~'} {destino.relative_to(REPO)} ({w}x{h})")
-    print("\nPNG para o PyPI (opcional, precisa do Chrome):")
-    print('  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \\')
-    print("    --headless --screenshot=docs/img/mkqr.png --force-device-scale-factor=2 \\")
-    print("    --default-background-color=00000000 --window-size=W,H file://$PWD/docs/img/mkqr.svg")
+    print("\nO GIF do README é separado: vhs docs/demo.tape")
     return 0
 
 

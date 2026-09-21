@@ -9,7 +9,7 @@
 
 🇺🇸 [Read in English](README.md)
 
-![mkqr no terminal](docs/img/mkqr.png)
+<img src="docs/img/demo.gif" alt="mkqr gerando QR codes no terminal" width="820">
 
 Digite `mkqr` sem argumentos para ver o guia rápido, ou `mkqr -h` para tudo.
 
@@ -97,7 +97,8 @@ JPG, PDF e EPS não têm transparência e saem com fundo branco e margem 4.
 | `--uninstall-completion` | remove o autocomplete de todos os shells | |
 | `--no-color` | desliga as cores (ou defina `NO_COLOR`) | |
 
-A ajuda completa (`mkqr -h`) também está em imagem: [docs/img/mkqr-help.svg](docs/img/mkqr-help.svg).
+A ajuda completa (`mkqr -h`) também está em imagem: [docs/img/mkqr-help.svg](docs/img/mkqr-help.svg),
+e o guia rápido em [docs/img/mkqr.svg](docs/img/mkqr.svg).
 
 ## Construído sobre
 
