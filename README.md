@@ -2,6 +2,7 @@
 
 **QR codes from the command line, without friction.** PNG, SVG, PDF, Wi-Fi, vCard, logo, clipboard.
 
+[![CI](https://github.com/berodcdev/mkqr/actions/workflows/ci.yml/badge.svg)](https://github.com/berodcdev/mkqr/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/berodcdev/mkqr?sort=semver)](https://github.com/berodcdev/mkqr/releases/latest)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -78,6 +79,7 @@ JPG, PDF and EPS have no alpha channel, so they get a white background and a mar
 
 `mkqr --install-completion` detects your `$SHELL`; override it with `--shell zsh`
 (or `bash`, `fish`, `all`). `mkqr --uninstall-completion` reverses it.
+CI runs the test suite on Ubuntu, macOS and Windows, from Python 3.10 to 3.14.
 
 ## Options
 

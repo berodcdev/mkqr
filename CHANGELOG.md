@@ -35,10 +35,8 @@ Primeira versão pública.
   do shell e das dependências opcionais de clipboard.
 - Suporte a Linux, macOS e Windows: clipboard via `wl-copy`/`xclip`, `osascript` ou
   PowerShell, e abertura de arquivo via `xdg-open`, `open` ou `os.startfile`.
-- Suíte de testes com 42 casos, e workflows de CI para Ubuntu, macOS e Windows do
-  Python 3.10 ao 3.14, com testes de fumaça da CLI, do protocolo de autocomplete e
-  dos instaladores. Os workflows estão desativados nesta versão; os testes rodam
-  com `pytest`.
+- Suíte de testes com 42 casos e CI em Ubuntu, macOS e Windows, do Python 3.10 ao 3.14,
+  incluindo testes de fumaça da CLI, do protocolo de autocomplete e dos instaladores.
 - `docs/make_screenshots.py` regera os screenshots da documentação a partir da saída
   real da CLI.
 

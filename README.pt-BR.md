@@ -2,6 +2,7 @@
 
 **QR codes pela linha de comando, sem fricção.** PNG, SVG, PDF, Wi-Fi, vCard, logo, clipboard.
 
+[![CI](https://github.com/berodcdev/mkqr/actions/workflows/ci.yml/badge.svg)](https://github.com/berodcdev/mkqr/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/berodcdev/mkqr?sort=semver)](https://github.com/berodcdev/mkqr/releases/latest)
 [![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![Licença: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue.svg)](LICENSE)
@@ -73,7 +74,7 @@ JPG, PDF e EPS não têm transparência e saem com fundo branco e margem 4.
 | `install.sh` / `uninstall.sh` | ✓ | ✓ (bash 3.2 ok) | via `pipx install .` |
 
 `mkqr --install-completion` detecta o seu `$SHELL`; force com `--shell zsh` (ou `bash`, `fish`, `all`).
-`mkqr --uninstall-completion` desfaz tudo.
+`mkqr --uninstall-completion` desfaz tudo. O CI roda em Ubuntu, macOS e Windows, do Python 3.10 ao 3.14.
 
 ## Opções
 

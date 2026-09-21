@@ -103,6 +103,11 @@ jobs:
   pypi:
     name: PyPI
     needs: build
+    # Só publica quando a variável do repositório PUBLISH_TO_PYPI for "true".
+    # Até o Trusted Publisher existir do lado do PyPI, este job é pulado e a tag
+    # continua gerando o GitHub Release normalmente.
+    #   gh variable set PUBLISH_TO_PYPI --body true
+    if: vars.PUBLISH_TO_PYPI == 'true'
     runs-on: ubuntu-latest
     environment:
       name: pypi

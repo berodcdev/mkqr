@@ -69,11 +69,9 @@ python docs/make_screenshots.py
 e inclua os `docs/img/*.svg` atualizados no commit. O script é determinístico:
 se nada mudou, ele imprime `=` e os arquivos ficam idênticos.
 
-Existe um job de CI (`screenshots em dia`) que regera e falha se o resultado
-diferir do que está commitado. Ele usa **Python 3.13** — se o seu diff só aparece
-em outra versão, é a formatação do argparse que mudou, não o seu código.
-Enquanto o CI estiver desligado (veja abaixo), essa checagem é sua: rode o script
-antes de abrir o PR.
+O CI tem um job (`screenshots em dia`) que regera e falha se o resultado diferir
+do que está commitado. Ele usa **Python 3.13** — se o seu diff só aparece em outra
+versão, é a formatação do argparse que mudou, não o seu código.
 
 O `docs/img/mkqr.png` (usado no README em inglês, porque o PyPI não renderiza
 o SVG) é regerado com Chrome headless — o próprio script imprime o comando.
@@ -102,23 +100,19 @@ Prefixo `docs:` para mudanças só de documentação. O resto vai sem prefixo.
 
 ## Integração contínua
 
-Os workflows em `.github/workflows/` (testes em Ubuntu, macOS e Windows do Python
-3.10 ao 3.14, testes dos instaladores, checagem dos screenshots e o pipeline de
-release) estão **desativados no momento**. Eles são válidos e ficam prontos para
-serem religados com:
+`ci.yml` roda a cada push e PR:
 
-```sh
-gh workflow enable ci.yml
-gh workflow enable release.yml
-```
-
-Até lá, rode `pytest` localmente antes de abrir um PR e diga no PR em qual
-sistema e versão do Python você testou.
+- **testes** — pytest em Ubuntu, macOS e Windows, do Python 3.10 ao 3.14, mais um
+  teste de fumaça que exercita a CLI de verdade (png, jpg, svg, pdf, Wi-Fi, vCard,
+  stdin e saída no terminal);
+- **install.sh** — instala e desinstala para valer em Ubuntu e macOS, com bash, zsh
+  e fish, e confere que a completion é carregada no shell de verdade;
+- **screenshots em dia** — descrito acima.
 
 ## Plataformas
 
 Se a sua mudança toca em `platform.py`, diga no PR em quais sistemas você testou
-de verdade. Clipboard e abertura de arquivo dependem de sessão gráfica e nem o CI
+de verdade. Clipboard e abertura de arquivo dependem de sessão gráfica, e nem o CI
 consegue exercitá-los.
 
 ## Lançando uma versão (mantenedores)
@@ -126,37 +120,26 @@ consegue exercitá-los.
 1. Atualize `__version__` em `src/mkqr/__init__.py`.
 2. Mova as entradas de `[Não lançado]` para a nova seção do `CHANGELOG.md`, com a data.
 3. Commit e envie.
-
-Com o CI ligado, basta empurrar a tag: `release.yml` roda os testes nos três
-sistemas, confere se a tag bate com `__version__`, monta os artefatos, cria o
-GitHub Release com as notas do CHANGELOG e publica no PyPI via Trusted
-Publishing (que ainda precisa ser configurado do lado do PyPI).
+4. Empurre a tag:
 
 ```sh
 git tag -a v0.2.0 -m "v0.2.0" && git push origin main --tags
 ```
 
-Com o CI desligado, o mesmo à mão (o GitHub Release não depende do Actions):
+`release.yml` roda os testes nos três sistemas, confere se a tag bate com
+`__version__`, monta o wheel e o sdist, e cria o GitHub Release com as notas
+tiradas da seção correspondente do CHANGELOG.
 
-```sh
-pip install -e ".[dev]" twine
-pytest
-rm -rf dist && python -m build && twine check dist/*
-git tag -a v0.2.0 -m "v0.2.0" && git push origin main --tags
-gh release create v0.2.0 dist/* --title v0.2.0 --notes-file NOTAS.md
-```
+### PyPI
 
-Para extrair as notas da seção certa do CHANGELOG:
+O mkqr ainda não está no PyPI, então o job `pypi` é pulado: ele só roda com a
+variável `PUBLISH_TO_PYPI` valendo `true`. Para ligar, uma vez:
 
-```sh
-python - <<'EOF' > NOTAS.md
-import pathlib, re
-v = "0.2.0"
-t = pathlib.Path("CHANGELOG.md").read_text()
-m = re.search(rf"^## \[{re.escape(v)}\].*?$(.*?)(?=^## \[|\Z)", t, re.S | re.M)
-print(m.group(1).strip())
-EOF
-```
+1. Crie o projeto `mkqr` no PyPI e registre o Trusted Publisher — dono
+   `berodcdev`, repositório `mkqr`, workflow `release.yml`, environment `pypi`.
+2. `gh variable set PUBLISH_TO_PYPI --body true`
+
+A partir daí a mesma tag publica nos dois lugares, sem token guardado no repo.
 
 ## Código de conduta
 
