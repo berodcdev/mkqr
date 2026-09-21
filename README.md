@@ -2,9 +2,8 @@
 
 **QR codes from the command line, without friction.** PNG, SVG, PDF, Wi-Fi, vCard, logo, clipboard.
 
-[![CI](https://github.com/berodcdev/mkqr/actions/workflows/ci.yml/badge.svg)](https://github.com/berodcdev/mkqr/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/mkqr.svg)](https://pypi.org/project/mkqr/)
-[![Python](https://img.shields.io/pypi/pyversions/mkqr.svg)](https://pypi.org/project/mkqr/)
+[![Release](https://img.shields.io/github/v/release/berodcdev/mkqr?sort=semver)](https://github.com/berodcdev/mkqr/releases/latest)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 🇧🇷 [Leia em português](README.pt-BR.md)
@@ -17,10 +16,11 @@
 ## Install
 
 ```sh
-pipx install mkqr        # recommended: isolated, on your PATH
-pip install mkqr         # or into the current environment
+pipx install git+https://github.com/berodcdev/mkqr.git          # latest
+pipx install https://github.com/berodcdev/mkqr/releases/download/v0.1.0/mkqr-0.1.0-py3-none-any.whl   # pinned
 ```
 
+Swap `pipx` for `pip` to install into the current environment instead.
 Then, optionally, enable Tab completion for your shell:
 
 ```sh
@@ -28,7 +28,7 @@ mkqr --install-completion
 ```
 
 <details>
-<summary>Install from source</summary>
+<summary>Install from a clone</summary>
 
 ```sh
 git clone https://github.com/berodcdev/mkqr.git && cd mkqr
@@ -38,6 +38,8 @@ git clone https://github.com/berodcdev/mkqr.git && cd mkqr
 
 On Windows without bash, `pipx install .` is enough.
 </details>
+
+> mkqr is not on PyPI yet.
 
 ## Usage
 
@@ -76,7 +78,6 @@ JPG, PDF and EPS have no alpha channel, so they get a white background and a mar
 
 `mkqr --install-completion` detects your `$SHELL`; override it with `--shell zsh`
 (or `bash`, `fish`, `all`). `mkqr --uninstall-completion` reverses it.
-CI runs the test suite on Ubuntu, macOS and Windows.
 
 ## Options
 

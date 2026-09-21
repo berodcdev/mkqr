@@ -2,9 +2,8 @@
 
 **QR codes pela linha de comando, sem fricção.** PNG, SVG, PDF, Wi-Fi, vCard, logo, clipboard.
 
-[![CI](https://github.com/berodcdev/mkqr/actions/workflows/ci.yml/badge.svg)](https://github.com/berodcdev/mkqr/actions/workflows/ci.yml)
-[![PyPI](https://img.shields.io/pypi/v/mkqr.svg)](https://pypi.org/project/mkqr/)
-[![Python](https://img.shields.io/pypi/pyversions/mkqr.svg)](https://pypi.org/project/mkqr/)
+[![Release](https://img.shields.io/github/v/release/berodcdev/mkqr?sort=semver)](https://github.com/berodcdev/mkqr/releases/latest)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
 [![Licença: MIT](https://img.shields.io/badge/licen%C3%A7a-MIT-blue.svg)](LICENSE)
 
 🇺🇸 [Read in English](README.md)
@@ -16,10 +15,11 @@ Digite `mkqr` sem argumentos para ver o guia rápido, ou `mkqr -h` para tudo.
 ## Instalação
 
 ```sh
-pipx install mkqr        # recomendado: isolado e no PATH
-pip install mkqr         # ou no ambiente atual
+pipx install git+https://github.com/berodcdev/mkqr.git          # sempre a versão mais recente
+pipx install https://github.com/berodcdev/mkqr/releases/download/v0.1.0/mkqr-0.1.0-py3-none-any.whl   # versão fixa
 ```
 
+Troque `pipx` por `pip` para instalar no ambiente atual.
 Depois, se quiser o Tab completando flags, cores, arquivos e redes Wi-Fi:
 
 ```sh
@@ -27,7 +27,7 @@ mkqr --install-completion
 ```
 
 <details>
-<summary>Instalar a partir do código-fonte</summary>
+<summary>Instalar a partir de um clone</summary>
 
 ```sh
 git clone https://github.com/berodcdev/mkqr.git && cd mkqr
@@ -37,6 +37,8 @@ git clone https://github.com/berodcdev/mkqr.git && cd mkqr
 
 No Windows (sem bash): `pipx install .` e pronto.
 </details>
+
+> O mkqr ainda não está no PyPI.
 
 ## Uso
 
@@ -71,7 +73,7 @@ JPG, PDF e EPS não têm transparência e saem com fundo branco e margem 4.
 | `install.sh` / `uninstall.sh` | ✓ | ✓ (bash 3.2 ok) | via `pipx install .` |
 
 `mkqr --install-completion` detecta o seu `$SHELL`; force com `--shell zsh` (ou `bash`, `fish`, `all`).
-`mkqr --uninstall-completion` desfaz tudo. O CI roda em Ubuntu, macOS e Windows.
+`mkqr --uninstall-completion` desfaz tudo.
 
 ## Opções
 
