@@ -3,6 +3,11 @@
 Gerado pela skill `sugerir`. Status: proposta · aceita · descartada · feita.
 Ideia descartada não volta a ser sugerida; o motivo fica registrado.
 
+## 2026-09-21 · a partir de "GIF de demonstração no README"
+- [ ] **Social preview do repositório** (P) — `usesCustomOpenGraphImage` é `false`: todo link do mkqr colado em Slack, X ou LinkedIn mostra o cartão genérico do GitHub; e a ferramenta gera a própria arte (`mkqr ... --logo`) num PNG 1280x640 · Settings → Social preview · _proposta_
+- [ ] **Uma imagem do `--logo`** (P) — `--logo` aparece 6 vezes no README e 0 vezes em imagem; `docs/img/` tem 3 arquivos e nenhum mostra o recurso mais visual da CLI, que é justamente o que faz alguém querer usar · `docs/img/` · _proposta_
+- [ ] **Tab completando no GIF** (M) — `docs/demo.tape` tem 0 comandos `Tab`, mas o guia rápido anuncia `--install-completion` como um dos dois destaques; o VHS script `Tab`, falta registrar a completion no shell da gravação · `docs/demo.tape` · _proposta_
+
 ## 2026-09-21 · a partir de "Abertura do mkqr como open source"
 - [ ] **Dar um giro de teste no release.yml** (P) — o workflow tem 4 jobs e 0 execuções: a tag v0.1.0 foi criada à mão antes de ele ser religado, então o caminho tag → testes → build → Release nunca rodou de verdade; um `workflow_dispatch` valida antes da v0.2.0 · `.github/workflows/release.yml` · _proposta_
 
