@@ -129,9 +129,13 @@ consegue exercitá-los.
 ## Lançando uma versão (mantenedores)
 
 1. Atualize `__version__` em `src/mkqr/__init__.py`.
-2. Mova as entradas de `[Não lançado]` para a nova seção do `CHANGELOG.md`, com a data.
-3. Commit e envie.
-4. Empurre a tag:
+2. Regere os screenshots: `python docs/make_screenshots.py`. O banner imprime a
+   versão, então os SVGs **sempre** mudam num release — e o job `screenshots em
+   dia` falha se você esquecer. Pelo mesmo motivo vale regravar o GIF:
+   `vhs docs/demo.tape`.
+3. Mova as entradas de `[Não lançado]` para a nova seção do `CHANGELOG.md`, com a data.
+4. Commit e envie.
+5. Empurre a tag:
 
 ```sh
 git tag -a v0.2.0 -m "v0.2.0" && git push origin main --tags

@@ -27,15 +27,38 @@ Then, optionally, enable Tab completion for your shell:
 mkqr --install-completion
 ```
 
+### No `pipx`?
+
+`pipx` installs each CLI into its own virtualenv, so mkqr's dependencies never
+collide with your projects. If you get `pipx: command not found`:
+
+| | |
+|---|---|
+| macOS | `brew install pipx` |
+| Debian / Ubuntu | `sudo apt install pipx` |
+| Fedora | `sudo dnf install pipx` |
+| Arch | `sudo pacman -S python-pipx` |
+| openSUSE | `sudo zypper install python3-pipx` |
+| anywhere else | `python3 -m pip install --user pipx` |
+
+Then `pipx ensurepath` once, and open a new terminal — it adds `~/.local/bin`
+to your `PATH`, which is where the `mkqr` command lands.
+
+In a hurry? `pip install mkqr` needs none of this.
+
 ### Without PyPI
 
 Straight from GitHub — same package, no PyPI involved. Useful if PyPI is
 unreachable, blocked on your network, or you want the latest commit:
 
 ```sh
-pipx install git+https://github.com/berodcdev/mkqr.git    # latest from main
-pipx install https://github.com/berodcdev/mkqr/releases/download/v0.1.0/mkqr-0.1.0-py3-none-any.whl
+pipx install git+https://github.com/berodcdev/mkqr.git          # latest from main
+pipx install git+https://github.com/berodcdev/mkqr.git@v0.1.1   # a specific release
 ```
+
+Prebuilt wheels are attached to every
+[release](https://github.com/berodcdev/mkqr/releases) if you'd rather not build
+from source.
 
 Or from a clone, which installs and wires up completion in one go:
 

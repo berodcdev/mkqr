@@ -7,6 +7,20 @@ e o versionamento segue [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [0.1.1] — 2026-09-22
+
+Só documentação: o código é idêntico ao da 0.1.0.
+
+### Corrigido
+
+- Os READMEs explicam como instalar o `pipx` em cada sistema, com os mesmos
+  comandos que o `install.sh` já sugeria. Quem não tinha o `pipx` batia num
+  `command not found` sem saída, porque a instalação recomendada começava por ele.
+- Os links do README em inglês, que é o `long_description` do pacote, agora são
+  absolutos. O PyPI resolve link relativo contra `pypi.org/project/mkqr/`, então
+  LICENSE, CONTRIBUTING, CHANGELOG, o README em português e os dois SVGs davam
+  404 na página publicada.
+
 ## [0.1.0] — 2026-09-21
 
 Primeira versão pública.
@@ -40,5 +54,6 @@ Primeira versão pública.
 - `docs/make_screenshots.py` regera os screenshots da documentação a partir da saída
   real da CLI.
 
-[Não lançado]: https://github.com/berodcdev/mkqr/compare/v0.1.0...HEAD
+[Não lançado]: https://github.com/berodcdev/mkqr/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/berodcdev/mkqr/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/berodcdev/mkqr/releases/tag/v0.1.0
