@@ -26,8 +26,17 @@ Depois, se quiser o Tab completando flags, cores, arquivos e redes Wi-Fi:
 mkqr --install-completion
 ```
 
-<details>
-<summary>Instalar a partir de um clone</summary>
+### Sem o PyPI
+
+Direto do GitHub — mesmo pacote, sem passar pelo PyPI. Serve se o PyPI estiver
+fora do ar, bloqueado na sua rede, ou se você quiser o commit mais recente:
+
+```sh
+pipx install git+https://github.com/berodcdev/mkqr.git    # o que está no main
+pipx install https://github.com/berodcdev/mkqr/releases/download/v0.1.0/mkqr-0.1.0-py3-none-any.whl
+```
+
+Ou a partir de um clone, que já instala e configura o autocomplete de uma vez:
 
 ```sh
 git clone https://github.com/berodcdev/mkqr.git && cd mkqr
@@ -36,7 +45,6 @@ git clone https://github.com/berodcdev/mkqr.git && cd mkqr
 ```
 
 No Windows (sem bash): `pipx install .` e pronto.
-</details>
 
 ## Uso
 

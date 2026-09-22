@@ -97,7 +97,13 @@ jobs:
           while linhas and (re.match(r"^\[[^\]]+\]:\s", linhas[-1]) or not linhas[-1].strip()):
               linhas.pop()
           print("\n".join(linhas))
-          print(f"\n## Instalação\n\n```sh\npipx install mkqr=={v}\n```")
+          tag = "v" + v
+          whl = f"mkqr-{v}-py3-none-any.whl"
+          base = "https://github.com/berodcdev/mkqr/releases/download"
+          print("\n## Instalação\n")
+          print(f"```sh\npipx install mkqr=={v}\n```\n")
+          print("Sem o PyPI, direto daqui:\n")
+          print(f"```sh\npipx install {base}/{tag}/{whl}\n```")
           PY
           cat NOTAS.md
       - name: Publica o release

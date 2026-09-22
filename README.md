@@ -27,8 +27,17 @@ Then, optionally, enable Tab completion for your shell:
 mkqr --install-completion
 ```
 
-<details>
-<summary>Install from a clone</summary>
+### Without PyPI
+
+Straight from GitHub — same package, no PyPI involved. Useful if PyPI is
+unreachable, blocked on your network, or you want the latest commit:
+
+```sh
+pipx install git+https://github.com/berodcdev/mkqr.git    # latest from main
+pipx install https://github.com/berodcdev/mkqr/releases/download/v0.1.0/mkqr-0.1.0-py3-none-any.whl
+```
+
+Or from a clone, which installs and wires up completion in one go:
 
 ```sh
 git clone https://github.com/berodcdev/mkqr.git && cd mkqr
@@ -37,7 +46,6 @@ git clone https://github.com/berodcdev/mkqr.git && cd mkqr
 ```
 
 On Windows without bash, `pipx install .` is enough.
-</details>
 
 ## Usage
 
