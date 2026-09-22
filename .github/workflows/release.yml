@@ -72,6 +72,9 @@ jobs:
   github-release:
     name: GitHub Release
     needs: build
+    # Num workflow_dispatch o GITHUB_REF_NAME é o branch, não uma versão: aí o
+    # run vira só um ensaio de testes + build, sem publicar nada.
+    if: github.ref_type == 'tag'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -88,17 +91,28 @@ jobs:
           v = "${{ needs.build.outputs.versao }}"
           texto = pathlib.Path("CHANGELOG.md").read_text()
           m = re.search(rf"^## \[{re.escape(v)}\].*?$(.*?)(?=^## \[|\Z)", texto, re.S | re.M)
-          print((m.group(1).strip() if m else "Veja o CHANGELOG.md.") + "\n")
+          corpo = m.group(1).strip() if m else "Veja o CHANGELOG.md."
+          # o rodapé do CHANGELOG define os links [versao]: url; eles não são nota
+          linhas = corpo.split("\n")
+          while linhas and (re.match(r"^\[[^\]]+\]:\s", linhas[-1]) or not linhas[-1].strip()):
+              linhas.pop()
+          print("\n".join(linhas))
+          print(f"\n## Instalação\n\n```sh\npipx install mkqr=={v}\n```")
           PY
           cat NOTAS.md
       - name: Publica o release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${GITHUB_REF_NAME}" dist/* \
-            --title "${GITHUB_REF_NAME}" \
-            --notes-file NOTAS.md \
-            --verify-tag
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            gh release edit "${GITHUB_REF_NAME}" --notes-file NOTAS.md
+            gh release upload "${GITHUB_REF_NAME}" dist/* --clobber
+          else
+            gh release create "${GITHUB_REF_NAME}" dist/* \
+              --title "${GITHUB_REF_NAME}" \
+              --notes-file NOTAS.md \
+              --verify-tag
+          fi
 
   pypi:
     name: PyPI
