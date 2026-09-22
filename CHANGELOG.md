@@ -7,6 +7,12 @@ e o versionamento segue [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### Adicionado
+
+- Seção "Atualizar" nos READMEs: `pipx upgrade mkqr`, `pip install -U mkqr` e o
+  caso de quem instalou pelo GitHub ou de um clone, em que o `pipx upgrade`
+  reconsulta a origem original e não vai ao PyPI.
+
 ## [0.1.2] — 2026-09-22
 
 ### Adicionado

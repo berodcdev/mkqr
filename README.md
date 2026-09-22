@@ -70,6 +70,38 @@ git clone https://github.com/berodcdev/mkqr.git && cd mkqr
 
 On Windows without bash, `pipx install .` is enough.
 
+## Update
+
+```sh
+pipx upgrade mkqr        # if you installed with pipx
+pip install -U mkqr      # if you installed with pip
+mkqr -V                  # check which version you're on
+```
+
+`pipx upgrade-all` updates mkqr along with every other tool pipx manages.
+
+<details>
+<summary>Installed from GitHub instead?</summary>
+
+`pipx upgrade` re-resolves the original source, so it only reaches PyPI if that's
+where it came from. For a GitHub install, reinstall over it:
+
+```sh
+pipx install --force git+https://github.com/berodcdev/mkqr.git
+```
+
+From a clone, pull first — `install.sh` reinstalls over whatever is there:
+
+```sh
+git pull && ./install.sh
+```
+
+If you installed from a clone and later want normal upgrades, switch the source
+once with `pipx install --force mkqr`; after that `pipx upgrade mkqr` works.
+</details>
+
+Releases are listed in [CHANGELOG.md](https://github.com/berodcdev/mkqr/blob/main/CHANGELOG.md).
+
 ## Usage
 
 Type `mkqr` with no arguments for a quick guide, or `mkqr -h` for everything.

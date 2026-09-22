@@ -69,6 +69,41 @@ git clone https://github.com/berodcdev/mkqr.git && cd mkqr
 
 No Windows (sem bash): `pipx install .` e pronto.
 
+## Atualizar
+
+```sh
+pipx upgrade mkqr        # se instalou com pipx
+pip install -U mkqr      # se instalou com pip
+mkqr -V                  # confere em qual versão você está
+```
+
+O `pipx upgrade-all` atualiza o mkqr junto com todas as outras ferramentas que o
+pipx gerencia.
+
+<details>
+<summary>Instalou pelo GitHub, e não pelo PyPI?</summary>
+
+O `pipx upgrade` reconsulta a origem original — então ele só vai ao PyPI se foi
+de lá que veio. Para uma instalação vinda do GitHub, reinstale por cima:
+
+```sh
+pipx install --force git+https://github.com/berodcdev/mkqr.git
+```
+
+A partir de um clone, atualize o clone antes; o `install.sh` reinstala por cima
+do que estiver lá:
+
+```sh
+git pull && ./install.sh
+```
+
+Se instalou de um clone e quiser passar a receber atualizações normais, troque a
+origem uma vez com `pipx install --force mkqr`. Depois disso o
+`pipx upgrade mkqr` funciona.
+</details>
+
+As versões estão listadas no [CHANGELOG.md](CHANGELOG.md).
+
 ## Uso
 
 ```sh
