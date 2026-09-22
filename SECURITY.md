@@ -45,6 +45,22 @@ segurança faria sentido são:
 - **Conteúdo do QR.** O mkqr codifica o que você mandar, sem validar. Um QR gerado
   a partir de conteúdo não confiável carrega esse conteúdo para quem o ler.
 
+## Como o projeto se protege
+
+Ligado neste repositório, e verificável por qualquer pessoa na aba Security:
+
+- **Secret scanning** e **push protection**: um commit que contenha uma
+  credencial reconhecida é barrado antes de entrar.
+- **CodeQL** em `python` e `actions`, a cada push e pull request. A análise de
+  `actions` cobre os workflows, não só o código.
+- **Dependabot**: alertas, atualizações de segurança e PRs semanais para as
+  dependências e para as GitHub Actions.
+- **`main` protegido**: sem force-push, sem deleção, histórico linear e sete
+  checks obrigatórios (testes nos três sistemas, screenshots e CodeQL).
+- **Publicação no PyPI por Trusted Publishing (OIDC)**, a partir de um
+  environment que só aceita tags `v*`. Não existe token nem secret de PyPI
+  guardado no repositório, então não há o que vazar.
+
 ## Escopo
 
 Está fora de escopo: vulnerabilidades em dependências que já tenham aviso
