@@ -5,9 +5,9 @@
 [![CI](https://github.com/berodcdev/mkqr/actions/workflows/ci.yml/badge.svg)](https://github.com/berodcdev/mkqr/actions/workflows/ci.yml)
 [![PyPI](https://img.shields.io/pypi/v/mkqr.svg)](https://pypi.org/project/mkqr/)
 [![Python](https://img.shields.io/pypi/pyversions/mkqr.svg)](https://pypi.org/project/mkqr/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/berodcdev/mkqr/blob/main/LICENSE)
 
-🇧🇷 [Leia em português](README.pt-BR.md)
+🇧🇷 [Leia em português](https://github.com/berodcdev/mkqr/blob/main/README.pt-BR.md)
 
 <img src="https://raw.githubusercontent.com/berodcdev/mkqr/main/docs/img/demo.gif" alt="mkqr generating QR codes in a terminal" width="820">
 
@@ -107,8 +107,8 @@ CI runs the test suite on Ubuntu, macOS and Windows, from Python 3.10 to 3.14.
 | `--uninstall-completion` | remove completion from every shell | |
 | `--no-color` | disable colors (or set `NO_COLOR`) | |
 
-The full help (`mkqr -h`) is also available as an image: [docs/img/mkqr-help.svg](docs/img/mkqr-help.svg),
-and the quick guide as [docs/img/mkqr.svg](docs/img/mkqr.svg).
+The full help (`mkqr -h`) is also available as an image: [docs/img/mkqr-help.svg](https://github.com/berodcdev/mkqr/blob/main/docs/img/mkqr-help.svg),
+and the quick guide as [docs/img/mkqr.svg](https://github.com/berodcdev/mkqr/blob/main/docs/img/mkqr.svg).
 
 ## Built on
 
@@ -125,9 +125,9 @@ pip install -e ".[dev]"
 pytest
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full workflow, and
-[CHANGELOG.md](CHANGELOG.md) for what changed between releases.
+See [CONTRIBUTING.md](https://github.com/berodcdev/mkqr/blob/main/CONTRIBUTING.md) for the full workflow, and
+[CHANGELOG.md](https://github.com/berodcdev/mkqr/blob/main/CHANGELOG.md) for what changed between releases.
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT — see [LICENSE](https://github.com/berodcdev/mkqr/blob/main/LICENSE).

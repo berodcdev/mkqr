@@ -155,6 +155,11 @@ O que sustenta isso, já configurado:
 Para desligar a publicação temporariamente, sem mexer no workflow:
 `gh variable set PUBLISH_TO_PYPI --body false`.
 
+Um detalhe do `README.md`: ele é o `long_description` do pacote, e o PyPI
+resolve link relativo contra `pypi.org/project/mkqr/`. Por isso os links dele
+apontam para `github.com/berodcdev/mkqr/blob/main/...` em vez de caminhos do
+repositório. O `README.pt-BR.md` não vai para o PyPI e pode usar relativos.
+
 ## Código de conduta
 
 Este projeto segue o [Código de Conduta](CODE_OF_CONDUCT.md).
