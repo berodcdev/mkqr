@@ -10,7 +10,7 @@ import sys
 
 import segno
 
-from . import __version__
+from . import __url__, __version__
 
 # ---------------------------------------------------------------- cores
 
@@ -193,5 +193,7 @@ def quickstart(prog: str) -> str:
         + "\n  " + paint("Uso rápido", C.TITLE) + "\n"
         + _table(prog, QUICK) + "\n\n"
         + "  " + paint("Mais", C.TITLE) + "\n"
-        + _table(prog, MORE) + "\n"
+        + _table(prog, MORE) + "\n\n"
+        # quem descobre o mkqr pelo terminal não tem outro caminho até o repositório
+        + "  " + paint(__url__, C.URL) + "\n"
     )

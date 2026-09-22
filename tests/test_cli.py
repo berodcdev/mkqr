@@ -4,6 +4,7 @@ from pathlib import Path
 
 import pytest
 
+import mkqr
 from mkqr import cli
 
 
@@ -145,3 +146,21 @@ def test_main_logo_exige_raster(tmp_path: Path) -> None:
 def test_main_sem_args_mostra_guia(capsys: pytest.CaptureFixture[str]) -> None:
     assert cli.main([]) == 0
     assert "Uso rápido" in capsys.readouterr().out
+
+
+def test_guia_mostra_o_repositorio(capsys: pytest.CaptureFixture[str]) -> None:
+    """Quem descobre o mkqr pelo terminal precisa de um caminho até o projeto."""
+    assert cli.main([]) == 0
+    assert mkqr.__url__ in capsys.readouterr().out
+
+
+def test_url_do_projeto_bate_com_o_pyproject() -> None:
+    """A URL do guia e a do pacote não podem divergir."""
+    import re
+
+    raiz = Path(__file__).resolve().parent.parent
+    pyproject = (raiz / "pyproject.toml").read_text()
+    homepage = re.search(r'^Homepage = "([^"]+)"', pyproject, re.M)
+    if homepage is None:  # pacote instalado sem o pyproject por perto
+        pytest.skip("pyproject.toml não disponível")
+    assert mkqr.__url__ == homepage.group(1)

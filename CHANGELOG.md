@@ -7,6 +7,13 @@ e o versionamento segue [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+### Adicionado
+
+- O guia rápido (`mkqr` sem argumentos) termina com o endereço do repositório.
+  Quem descobre a ferramenta pelo terminal não tinha nenhum caminho até o
+  projeto. A URL vive em `mkqr.__url__`, e um teste garante que ela não diverge
+  da `Homepage` do `pyproject.toml`.
+
 ## [0.1.1] — 2026-09-22
 
 Só documentação: o código é idêntico ao da 0.1.0.
