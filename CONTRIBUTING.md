@@ -143,14 +143,17 @@ tiradas da seção correspondente do CHANGELOG.
 
 ### PyPI
 
-O mkqr ainda não está no PyPI, então o job `pypi` é pulado: ele só roda com a
-variável `PUBLISH_TO_PYPI` valendo `true`. Para ligar, uma vez:
+A mesma tag publica no PyPI, via Trusted Publishing: o GitHub prova a identidade
+por OIDC na hora do deploy, então **não há token nem secret guardado no repo**.
+O que sustenta isso, já configurado:
 
-1. Crie o projeto `mkqr` no PyPI e registre o Trusted Publisher — dono
-   `berodcdev`, repositório `mkqr`, workflow `release.yml`, environment `pypi`.
-2. `gh variable set PUBLISH_TO_PYPI --body true`
+- o Trusted Publisher registrado no PyPI aponta para dono `berodcdev`,
+  repositório `mkqr`, workflow `release.yml`, environment `pypi`;
+- o environment `pypi` do repositório só aceita deploy a partir de tags `v*`;
+- o job `pypi` só roda com a variável `PUBLISH_TO_PYPI` valendo `true`.
 
-A partir daí a mesma tag publica nos dois lugares, sem token guardado no repo.
+Para desligar a publicação temporariamente, sem mexer no workflow:
+`gh variable set PUBLISH_TO_PYPI --body false`.
 
 ## Código de conduta
 
