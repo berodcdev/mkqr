@@ -60,6 +60,10 @@ Ligado neste repositório, e verificável por qualquer pessoa na aba Security:
 - **Publicação no PyPI por Trusted Publishing (OIDC)**, a partir de um
   environment que só aceita tags `v*`. Não existe token nem secret de PyPI
   guardado no repositório, então não há o que vazar.
+- **GitHub Actions fixadas por SHA**, não por tag. Tag pode ser movida para
+  outro commit; SHA não. Como o workflow de release tem permissão de publicar
+  no PyPI, uma action comprometida publicaria um pacote em nome do projeto —
+  o SHA fecha esse caminho. O Dependabot continua propondo as atualizações.
 
 ## Escopo
 

@@ -120,6 +120,26 @@ Prefixo `docs:` para mudanças só de documentação. O resto vai sem prefixo.
   e fish, e confere que a completion é carregada no shell de verdade;
 - **screenshots em dia** — descrito acima.
 
+### Actions fixadas por SHA
+
+As `uses:` dos workflows apontam para o SHA do commit, com a versão legível num
+comentário ao lado:
+
+```yaml
+- uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+```
+
+Não troque por `@v7`. Uma tag pode ser reapontada para outro commit pelo dono da
+action; o SHA não pode. Como o `release.yml` publica no PyPI, isso importa aqui.
+O Dependabot entende esse formato e atualiza o SHA e o comentário juntos — então
+a manutenção continua automática.
+
+Para fixar uma action nova:
+
+```sh
+gh api repos/<owner>/<repo>/commits/<tag> -q .sha
+```
+
 ## Plataformas
 
 Se a sua mudança toca em `platform.py`, diga no PR em quais sistemas você testou
