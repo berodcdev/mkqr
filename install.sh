@@ -85,6 +85,15 @@ MKQR="$BIN_DIR/mkqr"
 [[ -x "$MKQR" ]] || fail "instalação terminou mas $MKQR não existe."
 ok "$("$MKQR" --version) instalado em $MKQR$([[ $EDITABLE -eq 1 ]] && echo " ${D}(editável → $REPO)${N}")"
 
+# O pipx guarda a origem da instalação. Instalando desta pasta — que é o certo,
+# porque é o código que você clonou —, um `pipx upgrade mkqr` reconstrói daqui e
+# nunca consulta o PyPI. Quem não souber disso fica numa versão velha achando
+# que está atualizado.
+if [[ $EDITABLE -eq 0 ]]; then
+  echo "    ${D}origem: esta pasta. 'pipx upgrade mkqr' reconstrói daqui, não do PyPI.${N}"
+  echo "    ${D}para seguir as versões publicadas: pipx install --force mkqr${N}"
+fi
+
 step "4/4 autocomplete e extras"
 if [[ $COMPLETION -eq 1 ]]; then
   COMP_ARGS=(--install-completion)

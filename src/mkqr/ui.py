@@ -71,7 +71,14 @@ TAGLINE = "QR codes pela linha de comando, sem fricção."
 
 
 def _mini_qr() -> list[str]:
-    """Um QR de verdade (micro) com o texto 'mkqr', em blocos compactos."""
+    """Um QR de verdade (micro) com o texto 'mkqr', em blocos compactos.
+
+    É decorativo: sai claro sobre escuro e sem zona de silêncio, então nenhum
+    leitor decodifica. Já tentamos apontá-lo para o repositório; para escanear
+    de fato ele teria que virar um bloco branco com margem, de 15 linhas, e o
+    guia rápido deixaria de caber numa tela. A URL clicável no rodapé do guia
+    resolve a descoberta sem esse custo.
+    """
     buf = io.StringIO()
     try:
         segno.make("mkqr", micro=True, error="L").terminal(out=buf, compact=True, border=0)

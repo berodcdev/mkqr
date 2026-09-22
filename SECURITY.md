@@ -60,6 +60,15 @@ Ligado neste repositório, e verificável por qualquer pessoa na aba Security:
 - **Publicação no PyPI por Trusted Publishing (OIDC)**, a partir de um
   environment que só aceita tags `v*`. Não existe token nem secret de PyPI
   guardado no repositório, então não há o que vazar.
+- **Atestados de proveniência (PEP 740)** em cada arquivo publicado. O PyPI
+  guarda a prova de que aquele wheel saiu deste workflow, neste repositório, e
+  qualquer pessoa pode conferir sem depender da nossa palavra:
+
+  ```sh
+  curl -s https://pypi.org/integrity/mkqr/0.1.3/mkqr-0.1.3-py3-none-any.whl/provenance \
+    | python3 -m json.tool | grep -A3 publisher
+  ```
+
 - **GitHub Actions fixadas por SHA**, não por tag. Tag pode ser movida para
   outro commit; SHA não. Como o workflow de release tem permissão de publicar
   no PyPI, uma action comprometida publicaria um pacote em nome do projeto —
