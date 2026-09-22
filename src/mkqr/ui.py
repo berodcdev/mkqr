@@ -163,11 +163,11 @@ class Parser(argparse.ArgumentParser):
 
 
 QUICK = [
-    ("https://nodetp.com.br", "mostra o QR aqui no terminal"),
-    ("https://nodetp.com.br -O site.png", "salva PNG recortado e transparente"),
-    ("https://nodetp.com.br -O ~/Documents/", "salva com nome automático"),
-    ("https://nodetp.com.br -c", "copia PNG para o clipboard"),
-    ("https://nodetp.com.br -O site.png --logo logo.png", "logo no centro"),
+    ("https://example.com", "mostra o QR aqui no terminal"),
+    ("https://example.com -O site.png", "salva PNG recortado e transparente"),
+    ("https://example.com -O ~/Documents/", "salva com nome automático"),
+    ("https://example.com -c", "copia PNG para o clipboard"),
+    ("https://example.com -O site.png --logo logo.png", "logo no centro"),
     ("--wifi MinhaRede -p senha -O ./", "QR que conecta no Wi-Fi"),
     ("--vcard 'Ana Lima' --phone +55...", "QR de contato"),
 ]

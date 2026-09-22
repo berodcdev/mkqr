@@ -7,12 +7,20 @@ e o versionamento segue [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [0.1.2] — 2026-09-22
+
 ### Adicionado
 
 - O guia rápido (`mkqr` sem argumentos) termina com o endereço do repositório.
   Quem descobre a ferramenta pelo terminal não tinha nenhum caminho até o
   projeto. A URL vive em `mkqr.__url__`, e um teste garante que ela não diverge
   da `Homepage` do `pyproject.toml`.
+
+### Alterado
+
+- Os exemplos da ajuda, do guia rápido e do README usam `example.com`, o domínio
+  que a RFC 2606 reserva para documentação. Antes apontavam para um site real,
+  que não tem relação com o projeto e virava propaganda involuntária.
 
 ## [0.1.1] — 2026-09-22
 
@@ -61,6 +69,7 @@ Primeira versão pública.
 - `docs/make_screenshots.py` regera os screenshots da documentação a partir da saída
   real da CLI.
 
-[Não lançado]: https://github.com/berodcdev/mkqr/compare/v0.1.1...HEAD
+[Não lançado]: https://github.com/berodcdev/mkqr/compare/v0.1.2...HEAD
+[0.1.2]: https://github.com/berodcdev/mkqr/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/berodcdev/mkqr/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/berodcdev/mkqr/releases/tag/v0.1.0

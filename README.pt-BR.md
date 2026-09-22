@@ -72,12 +72,12 @@ No Windows (sem bash): `pipx install .` e pronto.
 ## Uso
 
 ```sh
-mkqr https://nodetp.com.br                          # mostra no terminal
-mkqr https://nodetp.com.br -O ~/Documents/nodetp-qrcode.png
-mkqr https://nodetp.com.br -O ~/Documents/          # nome automático: nodetp.com.br-qrcode.png
-mkqr https://nodetp.com.br -c                       # copia o PNG para o clipboard
-mkqr https://nodetp.com.br -O site.png --open       # salva e abre no visualizador
-mkqr https://nodetp.com.br -O site.png --logo logo.png   # logo no centro
+mkqr https://example.com                          # mostra no terminal
+mkqr https://example.com -O ~/Documents/example-qrcode.png
+mkqr https://example.com -O ~/Documents/          # nome automático: example.com-qrcode.png
+mkqr https://example.com -c                       # copia o PNG para o clipboard
+mkqr https://example.com -O site.png --open       # salva e abre no visualizador
+mkqr https://example.com -O site.png --logo logo.png   # logo no centro
 mkqr 'texto' -O card.svg --dark '#0a2540'
 mkqr --wifi MinhaRede -p senha123 -O ./             # QR que conecta na rede
 mkqr --vcard 'Ana Lima' --phone +5511999999999 --email ana@x.com --org Acme -O ./

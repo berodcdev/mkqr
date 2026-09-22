@@ -13,7 +13,7 @@ from mkqr import cli
 @pytest.mark.parametrize(
     ("text", "expected"),
     [
-        ("https://nodetp.com.br", "nodetp.com.br-qrcode"),
+        ("https://example.com", "example.com-qrcode"),
         ("http://www.exemplo.com/a/b?c=1", "exemplo.com-a-b-c-1-qrcode"),
         ("texto com espaços e ação", "texto-com-espa-os-e-a-o-qrcode"),
         ("   ", "qrcode-qrcode"),
@@ -35,8 +35,8 @@ def test_resolve_output_none_e_terminal() -> None:
 
 
 def test_resolve_output_diretorio_gera_nome(tmp_path: Path) -> None:
-    out = cli.resolve_output(str(tmp_path), "https://nodetp.com.br")
-    assert out == tmp_path / "nodetp.com.br-qrcode.png"
+    out = cli.resolve_output(str(tmp_path), "https://example.com")
+    assert out == tmp_path / "example.com-qrcode.png"
 
 
 def test_resolve_output_barra_final_e_diretorio_mesmo_sem_existir(tmp_path: Path) -> None:
@@ -61,9 +61,9 @@ def parse(*argv: str):
 
 
 def test_build_content_texto() -> None:
-    parser, args = parse("https://nodetp.com.br")
+    parser, args = parse("https://example.com")
     data, label = cli.build_content(args, parser)
-    assert data == label == "https://nodetp.com.br"
+    assert data == label == "https://example.com"
 
 
 def test_build_content_wifi_wpa() -> None:
@@ -110,7 +110,7 @@ def test_main_gera_png_transparente_sem_margem(tmp_path: Path) -> None:
     from PIL import Image
 
     out = tmp_path / "a.png"
-    assert cli.main(["https://nodetp.com.br", "-O", str(out), "-q"]) == 0
+    assert cli.main(["https://example.com", "-O", str(out), "-q"]) == 0
     im = Image.open(out).convert("RGBA")
     assert im.size == (250, 250)                   # 25 módulos × 10 px, sem margem
     assert im.getpixel((0, 0))[3] == 255           # módulo escuro do canto
@@ -121,7 +121,7 @@ def test_main_jpg_tem_fundo_branco_e_margem(tmp_path: Path) -> None:
     from PIL import Image
 
     out = tmp_path / "a.jpg"
-    assert cli.main(["https://nodetp.com.br", "-O", str(out), "-q"]) == 0
+    assert cli.main(["https://example.com", "-O", str(out), "-q"]) == 0
     im = Image.open(out)
     assert im.size == (330, 330)                   # (25 + 2×4) × 10
     assert im.getpixel((0, 0)) == (255, 255, 255)
