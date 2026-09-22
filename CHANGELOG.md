@@ -7,11 +7,15 @@ e o versionamento segue [Semantic Versioning](https://semver.org/lang/pt-BR/).
 
 ## [Não lançado]
 
+## [0.1.3] — 2026-09-22
+
 ### Adicionado
 
 - Seção "Atualizar" nos READMEs: `pipx upgrade mkqr`, `pip install -U mkqr` e o
   caso de quem instalou pelo GitHub ou de um clone, em que o `pipx upgrade`
-  reconsulta a origem original e não vai ao PyPI.
+  reconsulta a origem original e não vai ao PyPI. Quem usou o `install.sh` fica
+  com o pipx apontando para a pasta do clone, então nunca enxerga versão nova
+  sem trocar a origem — a seção mostra como.
 
 ## [0.1.2] — 2026-09-22
 
@@ -75,7 +79,8 @@ Primeira versão pública.
 - `docs/make_screenshots.py` regera os screenshots da documentação a partir da saída
   real da CLI.
 
-[Não lançado]: https://github.com/berodcdev/mkqr/compare/v0.1.2...HEAD
+[Não lançado]: https://github.com/berodcdev/mkqr/compare/v0.1.3...HEAD
+[0.1.3]: https://github.com/berodcdev/mkqr/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/berodcdev/mkqr/compare/v0.1.1...v0.1.2
 [0.1.1]: https://github.com/berodcdev/mkqr/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/berodcdev/mkqr/releases/tag/v0.1.0
